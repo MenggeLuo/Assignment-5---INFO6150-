@@ -1,5 +1,8 @@
 # INFO6150-Project-Yuheng Li
 
+![preview-1](resource/preview-1.png "preview-1")
+![preview-2](resource/preview-2.png "preview-2")
+
 ## used bootstrap class
 ###### card, container, model and toast
 modal, modal-dialog, modal-content, modal-header, modal-title, modal-body, modal-footer, toast-container, toast, toast-body, container, card, card-body
@@ -17,14 +20,14 @@ position-fixed, top-0, start-50, translate-middle-x, p-3, d-flex, align-items-ce
 
 ## Structure
 
-│  log-in.html
-│  log-in.js
-│  readme.md
-│  sign-up.html
-│  sign-up.js
-│  sign.css
-├─bootstrap-5.3.3-dist
-└─resource
+│  log-in.html<br>
+│  log-in.js<br>
+│  readme.md<br>
+│  sign-up.html<br>
+│  sign-up.js<br>
+│  sign.css<br>
+├─bootstrap-5.3.3-dist<br>
+└─resource<br>
     └─imgage
 
 
@@ -65,9 +68,11 @@ if the port is occupied, change the number 5000 and "fetch" in code
 then you can log in and sign up
 ## Upload
 Please follow the style.
-Put your css and js code in separate files.
-==Please use "**let and const**" to declare variables==, using "var" may result in scope conflicts.
-==Please use "**\=\=\=**" to compare two value
+Put your css and js code in separate files.<br>
+<font color=red>Please use "**let and const**" to declare variables</font><br>
+<font color=red>Please use "**let and const**" to declare variables</font>. Using "var" may result in scope conflicts.<br>
+<font color=red>Please use "**\=\=\=**" to compare two value</font><br>
+
 
 I download bootstrap and import it in the head domain
 ```
@@ -140,7 +145,7 @@ function randomColor() {// get random color
 
 ### About email
 
-please import emiljs in the ==head== domain
+please import emiljs in the <font color=red>head</font> domain
 
 ``` javascript
 <script type="text/javascript"
@@ -167,4 +172,4 @@ emailjs.init("efeIpbvvbrvnvcVBj");
     })
 ```
 
-And one **important** thing is ==**I have 200 send a month**==, please do not use this function frequently. If you do not need this function, do not use it.
+And one **important** thing is <font color=red>**I have 200 sends a month**</font>, please do not use this function frequently. If you do not need this function, do not use it.
