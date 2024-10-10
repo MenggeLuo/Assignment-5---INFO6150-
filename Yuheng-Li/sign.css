@@ -1,0 +1,68 @@
+.page-title{
+    text-align: center;
+}
+
+.log-container{
+    width: 400px;
+    margin: 100px auto 0 auto;
+    border: 1px solid #dddddd;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.sign-link-button{
+    text-decoration: none; 
+}
+
+.error{
+    font-size: smaller;
+    display: none;
+    color:#FF3333
+}
+
+.feedback{
+    font-size:x-small;
+    display: none;
+    color:#666666
+}
+
+@media only screen and (max-width: 768px){
+    .log-container{
+        width: 100%;
+        border: none;
+        margin: 50px auto 0 auto;
+    }
+}
+
+.page {
+    display: none;
+  }
+  
+.page.active {
+    display: block;
+}
+
+.sign-up-icon{
+    width: 12px;
+    height: 12px;
+}
+
+#password-set-check{
+    font-size: smaller;
+    display: none;
+    border-color: white;
+    border-radius: 10px;
+}
+
+.loading-icon{
+    width: 25px;
+    height: 25px;
+}
+
+body{
+    background-image: url(resource/imgage/theater.jpg);
+    background-size: cover;
+    background-position: center;
+    /* background-repeat: no-repeat; */
+}
