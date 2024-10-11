@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Search</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/015.webp');
@@ -14,70 +13,32 @@
             background-attachment: fixed;
             padding-top: 56px;
         }
-        .nav-item.nav-item.nav-item.dropdown
-        .nav-item.nav-item.dropdown{
-            margin-left: 50px;
-        }
-
-        .nav-item{
-            display: inline-block;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .navbar-nav {
-            margin-left: 50px; /* Reduced margin to bring the navigation items closer */
-            color: rgb(245, 244, 244); /* Changes the color of the nav links */
-            font-weight: bold; /* Makes the text bold */
-            display: flex;
-            align-items: center;
-        }
-
-        .navbar-nav .nav-link {
-            color: rgb(245, 244, 244); /* Ensures that the nav links inherit the desired color */
-            margin-left: 150px; /* Spacing between the nav links */
-            margin: 0 5px;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #ffffff; /* Optional: Change color on hover for better UX */
-        }
-
-
-        .navbar-brand {
-            font-size: 1.5rem; /* Slightly increase the size of the brand name */
-            margin-right: 0px; /* Ensure the brand has some space before nav items */
-        }
-
-        .dropdown-menu{
-            background-color: #676f77 !important; /* Dark gray background */
+        .search-container {
+            background-color: rgba(33, 37, 41, 0.8);
             border-radius: 10px;
+            padding: 20px;
+            margin-top: 50px;
         }
- 
 
+        .navbar-nav a {
+            margin-right: 200px;
+            color: rgb(245, 244, 244);
+            font-weight: bold;
+        }
+        .dropdown-menu {
+        background-color: #343a40; /* Dark gray background */
+        border-radius: 10px;
+        }
         .dropdown-item:hover {
-            background-color: #92969a !important; /* Slightly lighter gray for hover */
-            color: white; /* Ensure text stays white on hover */
+        background-color: #495057; /* Slightly lighter gray for hover */
+        color: white; /* Ensure text stays white on hover */
         }
 
-        .nav-item.dropdown .nav-link {
-            margin-left: 50px; /* Push the profile dropdown to the far right */
-        }
-
-        .navbar-collapse {
-            justify-content: space-between; /* Space out the logo and nav items */
-            margin-left: 10px;
-            color: white;
-        }
-        .nav-item.dropdown {
-            margin-left: 150px; /* Adjust the margin-left as needed */
-        }
 
         .movie-container{
             background-color: rgba(33, 37, 41, 0.8);
             border-radius: 10px;
-            margin-top: 20px;  
-            margin-bottom: 50px;         
+            margin-top: 20px;           
         }
 
         .gridcontainer {
@@ -107,112 +68,38 @@
         }
 
         
-        /* Responsive for iPhones */ 
-        @media screen and (max-width: 768px) { 
-        body { 
-          padding-top: 50px; 
-        } 
 
-        
-        .navbar-nav {
-        display: block; 
-        text-align: center; 
-        justify-content: center;
-        margin: 0 auto;
-        }    
-
-        .nav-item{
-          display: flex;
-          margin-left: 0;
-        }
-
-        .nav-link{
-          margin: 0 auto !important;
-          align-items: center !important;
-        }
-
-        .navbar-nav.ms-auto{
-          display: block; 
-          text-align: center; 
-          justify-content: center;
-          margin: 0 auto;
-          align-items: center;
-          flex-direction: column;
-        }
-        
-
-        .nav-item.dropdown {
-          display: flex;
-          margin-left: 0;
-          
-        }
-
-        .dropdown-menu.dropdown-menu-end {
-          left: 50%;
-          transform: translateX(-50%); 
-          top: 100%; 
-          margin-top: 0;
-          background-color: #676f77 !important;
-          border-radius: 10px;
-          z-index: 1000;
-          position: absolute;
-        }
-
-        .nav-item.dropdown a{
-          margin: 0 auto;
-        }
-      
-        
-        .gridcontainer { 
-        grid-template-columns: 1fr; 
-        gap: 15px; 
-        } 
-        
-        .movie-container { 
-        margin: 0 10px; 
-        } 
-        .card { 
-        width: 100%; 
-        }
-      }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <!-- Left side: Brand logo -->
             <a class="navbar-brand" href="#"><i class="fas fa-calendar-alt me-2"></i>MovieFinder</a>
-
-            <!-- Hamburger for mobile view -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <!-- Right side: Navbar links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <a class="nav-link active" href="#"><i class="fas fa-home me-1"></i>Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Search Movies</a>
+                        <a class="nav-link" href="#"><i class="fas fa-search me-1"></i>Search Movies</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">My Tickets</a>
+                        <a class="nav-link" href="#"><i class="fas fa-ticket-alt me-1"></i>My Tickets</a>
                     </li>
                 </ul>
-
-                <!-- User profile dropdown menu -->
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Account
+                            <i class="fas fa-user-circle me-1"></i>mengge
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog me-1"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-1"></i>Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-1"></i>Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -222,8 +109,6 @@
 
     <div class="container">
         <div class="search-container">
-            <br>
-            <br>
             <h2 class="text-center text-white mb-4">Movie Search</h2>
             <form id="searchForm">
                 <div class="row g-3">
@@ -249,9 +134,9 @@
         </div>
 
         <!-- Category Section with Centered Navbar -->
-        <!-- <nav class="navbar navbar-expand-xl navbar-light bg-dark justify-content-center mt-4">
+        <nav class="navbar navbar-expand-xl navbar-light bg-dark justify-content-center mt-4">
             <div class="container">
-                <span class="navbar-item text-white">Category:</span>
+                <span class="navbar-item ">Category:</span>
                 <div class="collapse navbar-collapse show" id="navbarWithDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -264,7 +149,6 @@
                             <a class="nav-link" href="#">Animation</a>
                         </li>
                         <li class="nav-item dropdown">
-                         
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Others
                             </a>
@@ -276,38 +160,10 @@
                         </li>
                     </ul>
                 </div>
-            </div> -->
+            </div>
         </nav>
     </div>
 
-    <br>
-    <br>
-
-    <!-- Carousel -->
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-        <h2 class="text-center text-white mb-4">Popular Movies</h2>
-        <div id="carouselExample" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="https://m.media-amazon.com/images/I/91kFYg4fX3L._AC_SY679_.jpg" class="d-block w-90 h-80 mx-auto mb-4" alt="Movie1" />
-                </div>
-                <div class="carousel-item">
-                    <img src="https://m.media-amazon.com/images/I/91kFYg4fX3L._AC_SY679_.jpg" class="d-block w-90 h-80 mx-auto mb-4" alt="Movie2">
-                </div>
-                <div class="carousel-item">
-                    <img src="https://m.media-amazon.com/images/I/91kFYg4fX3L._AC_SY679_.jpg" class="d-block w-90 h-80 mx-auto mb-4" alt="Movie3">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    </div>
 
     <div class="container">
         <div class="movie-container">
@@ -318,7 +174,6 @@
                         <!-- <meta name="referrer" content="no-referrer"> -->
                         <div class="card-body">
                           <h5 class="card-title text-center">LA LA LAND</h5>
-                          <div class="p-3 mb-2 bg-danger text-white">Top 1</div>
                           <p class="card-text">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
                             and Mia Dolan (Emma Stone), a jazz musician and an aspiring actress pursuing
                              their respective dreams in Los Angeles. </p>
@@ -337,9 +192,6 @@
                         <div class="card-body">
                           <button type="button" class="btn btn-warning">Music</button>
                             <button type="button" class="btn btn-danger">Love</button>
-                        </div>
-                        <div class="card-footer text-muted">
-                            97% Likes
                         </div>
                       </div>
                 </div>
@@ -350,7 +202,6 @@
                         <!-- <meta name="referrer" content="no-referrer"> -->
                         <div class="card-body">
                           <h5 class="card-title text-center">LA LA LAND</h5>
-                          <div class="p-3 mb-2 bg-success text-white">Top 2</div>
                           <p class="card-text">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
                             and Mia Dolan (Emma Stone), a jazz musician and an aspiring actress pursuing
                              their respective dreams in Los Angeles. </p>
@@ -369,9 +220,6 @@
                         <div class="card-body">
                           <button type="button" class="btn btn-warning">Music</button>
                             <button type="button" class="btn btn-danger">Love</button>
-                        </div>
-                        <div class="card-footer text-muted">
-                            97% Likes
                         </div>
                       </div>
                 </div>
@@ -382,7 +230,6 @@
                         <!-- <meta name="referrer" content="no-referrer"> -->
                         <div class="card-body">
                           <h5 class="card-title text-center">LA LA LAND</h5>
-                          <div class="p-3 mb-2 bg-light text-black">Top 3</div>
                           <p class="card-text">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
                             and Mia Dolan (Emma Stone), a jazz musician and an aspiring actress pursuing
                              their respective dreams in Los Angeles. </p>
@@ -401,9 +248,6 @@
                         <div class="card-body">
                           <button type="button" class="btn btn-warning">Music</button>
                             <button type="button" class="btn btn-danger">Love</button>
-                        </div>
-                        <div class="card-footer text-muted">
-                            97% Likes
                         </div>
                       </div>
                 </div>
@@ -414,8 +258,7 @@
                         <!-- <meta name="referrer" content="no-referrer"> -->
                         <div class="card-body">
                           <h5 class="card-title text-center">LA LA LAND</h5>
-                          <div class="p-3 mb-2 bg-info text-white">Top 4</div>
-                          <p class="card-text text-decoration-underline">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
+                          <p class="card-text">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
                             and Mia Dolan (Emma Stone), a jazz musician and an aspiring actress pursuing
                              their respective dreams in Los Angeles. </p>
                         </div>
@@ -434,9 +277,6 @@
                           <button type="button" class="btn btn-warning">Music</button>
                             <button type="button" class="btn btn-danger">Love</button>
                         </div>
-                        <div class="card-footer text-muted">
-                            97% Likes
-                        </div>
                       </div>
                 </div>
                 
@@ -444,70 +284,9 @@
             
         </div>  
     </div>
-
-    <footer class="footer-home">
-      
-        <div class="container">
-          <div class="row mb-5">
-            <div class="col-md-3">
-              <a href="#" class="footer-site-logo">MovieFinder</a>
-              <p></p>
-            </div>
-            <div class="col-md-2 ml-auto">
-              <h3>Title1</h3>
-              <ul class="list-unstyled links">
-                <li><a href="#">title1</a></li>
-                <li><a href="#">title2</a></li>
-                <li><a href="#">title3</a></li>
-              </ul>
-            </div>
-            <div class="col-md-2 ml-auto">
-              <h3>Title2</h3>
-              <ul class="list-unstyled links">
-                <li><a href="#">title1</a></li>
-                <li><a href="#">title2</a></li>
-              </ul>
-            </div>
-            <div class="col-md-2 ml-auto">
-              <h3>About</h3>
-              <ul class="list-unstyled links">
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">Team</a></li>
-                <li><a href="#">Join us</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="row mb-4">
-            <div class="col-12 pb-4">
-              <div class="line"></div>
-            </div>
-            <div class="col-md-6 text-md-left">
-              <ul class="list-unstyled link-menu nav-left">
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms &amp; Conditions</a></li>
-              </ul>
-            </div>
-            <div class="col-md-6 text-md-right">
-              <ul class="list-unstyled social nav-right">
-                <li><a href="#"><span class="icon-twitter"></span></a></li>
-                <li><a href="#"><span class="icon-instagram"></span></a></li>
-                <li><a href="#"><span class="icon-facebook"></span></a></li>
-                <li><a href="#"><span class="icon-pinterest"></span></a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-7">
-              <p><small>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus molestiae magnam voluptates accusamus voluptatum laboriosam animi eligendi nisi laudantium, porro adipisci similique. Dolorem dolor ipsum consequuntur dolores! Quasi, magni suscipit!</small></p>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-    </footer>
     
+    
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
