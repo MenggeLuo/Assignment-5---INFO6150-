@@ -123,16 +123,48 @@
 
         .nav-item{
           display: flex;
+          margin-left: 0;
         }
 
         .nav-link{
           margin: 0 auto !important;
           align-items: center !important;
         }
+
+        .navbar-nav.ms-auto{
+          display: block; 
+          text-align: center; 
+          justify-content: center;
+          margin: 0 auto;
+          align-items: center;
+          flex-direction: column;
+        }
         
 
+        .nav-item.dropdown {
+          display: flex;
+          margin-left: 0;
+          
+        }
+
+        .dropdown-menu.dropdown-menu-end {
+          left: 50%;
+          transform: translateX(-50%); 
+          top: 100%; 
+          margin-top: 0;
+          background-color: #676f77 !important;
+          border-radius: 10px;
+          z-index: 1000;
+          position: absolute;
+        }
+
+        .nav-item.dropdown a{
+          margin: 0 auto;
+        }
+      
+        
         .gridcontainer { 
-        grid-template-columns: 1fr; /* 1 column on phones */ 
+        grid-template-columns: 1fr; 
         gap: 15px; 
         } 
         
@@ -140,7 +172,7 @@
         margin: 0 10px; 
         } 
         .card { 
-        width: 100%; /* Full width for the cards */ 
+        width: 100%; 
         }
       }
     </style>
@@ -174,7 +206,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-1"></i>Account
+                            Account
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -217,7 +249,7 @@
         </div>
 
         <!-- Category Section with Centered Navbar -->
-        <nav class="navbar navbar-expand-xl navbar-light bg-dark justify-content-center mt-4">
+        <!-- <nav class="navbar navbar-expand-xl navbar-light bg-dark justify-content-center mt-4">
             <div class="container">
                 <span class="navbar-item text-white">Category:</span>
                 <div class="collapse navbar-collapse show" id="navbarWithDropdown">
@@ -244,7 +276,7 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
         </nav>
     </div>
 
@@ -286,6 +318,7 @@
                         <!-- <meta name="referrer" content="no-referrer"> -->
                         <div class="card-body">
                           <h5 class="card-title text-center">LA LA LAND</h5>
+                          <div class="p-3 mb-2 bg-danger text-white">Top 1</div>
                           <p class="card-text">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
                             and Mia Dolan (Emma Stone), a jazz musician and an aspiring actress pursuing
                              their respective dreams in Los Angeles. </p>
@@ -317,6 +350,7 @@
                         <!-- <meta name="referrer" content="no-referrer"> -->
                         <div class="card-body">
                           <h5 class="card-title text-center">LA LA LAND</h5>
+                          <div class="p-3 mb-2 bg-success text-white">Top 2</div>
                           <p class="card-text">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
                             and Mia Dolan (Emma Stone), a jazz musician and an aspiring actress pursuing
                              their respective dreams in Los Angeles. </p>
@@ -348,6 +382,7 @@
                         <!-- <meta name="referrer" content="no-referrer"> -->
                         <div class="card-body">
                           <h5 class="card-title text-center">LA LA LAND</h5>
+                          <div class="p-3 mb-2 bg-light text-black">Top 3</div>
                           <p class="card-text">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
                             and Mia Dolan (Emma Stone), a jazz musician and an aspiring actress pursuing
                              their respective dreams in Los Angeles. </p>
@@ -379,7 +414,8 @@
                         <!-- <meta name="referrer" content="no-referrer"> -->
                         <div class="card-body">
                           <h5 class="card-title text-center">LA LA LAND</h5>
-                          <p class="card-text">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
+                          <div class="p-3 mb-2 bg-info text-white">Top 4</div>
+                          <p class="card-text text-decoration-underline">The romantic musical La La Land tells the story of Seb Wilder (Ryan Gosling) 
                             and Mia Dolan (Emma Stone), a jazz musician and an aspiring actress pursuing
                              their respective dreams in Los Angeles. </p>
                         </div>
