@@ -66,3 +66,20 @@ body{
     background-position: center;
     /* background-repeat: no-repeat; */
 }
+
+
+#reset-password-container {
+    max-width: 400px;
+    margin: 100px auto 0 auto;
+}
+
+#new-password-form {
+    display: none;
+}
+
+.loading-icon {
+    width: 25px;
+    height: 25px;
+}
+
+/* Rest of the existing styles... */

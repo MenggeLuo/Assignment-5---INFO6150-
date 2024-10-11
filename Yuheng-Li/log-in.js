@@ -101,6 +101,9 @@ function junmToSignUp(){
     location.href=("sign-up.html")
 }
 
+function jumpToResetPassword(){
+    location.href=("reset-password.html")
+}
 // validate input
 function validateLoginInFormControl(event){
 
