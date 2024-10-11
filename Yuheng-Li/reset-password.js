@@ -12,6 +12,10 @@ const resetPasswordButton = document.getElementById("reset-password-button");
 const emailForm = document.getElementById("email-form");
 const newPasswordForm = document.getElementById("new-password-form");
 
+const backToLoginLink = document.getElementById("back-to-login");
+const confirmBackModal = new bootstrap.Modal(document.getElementById("confirm-back-modal"));
+const confirmBackButton = document.getElementById("confirm-back-button");
+
 // Toast Elements
 const resetEmailSentToast = new bootstrap.Toast(document.getElementById("reset-email-sent"));
 const resetErrorToast = new bootstrap.Toast(document.getElementById("reset-error"));
@@ -180,4 +184,17 @@ function randomColor() {// get random color
     let g = Math.floor(Math.random() * 256);
     let b = Math.floor(Math.random() * 256);
     return "rgb(" + r + "," + g + "," + b + ")";
+}
+
+// back button
+backToLoginLink.addEventListener("click", showConfirmBackModal);
+confirmBackButton.addEventListener("click", goBackToLogin);
+
+function showConfirmBackModal(event) {
+    event.preventDefault();
+    confirmBackModal.show();
+}
+
+function goBackToLogin() {
+    window.location.href = "log-in.html";
 }
