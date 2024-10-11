@@ -23,6 +23,8 @@ position-fixed, top-0, start-50, translate-middle-x, p-3, d-flex, align-items-ce
 │  log-in.html<br>
 │  log-in.js<br>
 │  readme.md<br>
+|  reset-password.html<br>
+|  reset-password.js<br>
 │  sign-up.html<br>
 │  sign-up.js<br>
 │  sign.css<br>
