@@ -6,7 +6,7 @@
 ## used bootstrap class
 ###### card, container, model and toast
 modal, modal-dialog, modal-content, modal-header, modal-title, modal-body, modal-footer, toast-container, toast, toast-body, container, card, card-body
-###### from
+###### form
 form-label,  form-control
 ###### button
 btn-close,  btn, btn-secondary, btn-close, btn-close-white, btn-link sign-link-button
