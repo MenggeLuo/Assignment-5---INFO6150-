@@ -28,6 +28,12 @@ page-title
 ###### position, color, style
 position-fixed, top-0, start-50, translate-middle-x, p-3, d-flex, align-items-center, text-white, bg-danger, border-0, me-2 m-auto, mb-3, row, col-sm-3, col-sm-7 offset-sm-2, col-lg-12
 
+# Shen Li
+## used bootstrap class in reset password page
+same as Yuheng Li's used components;
+## used bootstrap class in home page
+Accordion, badge, button group, pagination and spinners
+
 # Shuhan Jhang
 
 # css for home.html element
