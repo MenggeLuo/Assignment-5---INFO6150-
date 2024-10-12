@@ -30,4 +30,4 @@ card, list-group, btn, container
 
 ## home page in HTML
 ## used bootstrap
-Layout and Grid System, Navigation Components, Form Elements, Text Alignment and Spacing, Flex Layout Utilities
+Layout and Grid System, Navigation Components, Form Elements, Text Alignment and Spacing, Flex Layout Utilities, Carousel
