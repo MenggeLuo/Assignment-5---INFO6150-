@@ -1,7 +1,7 @@
 # Assignment-5---INFO6150-
 
-#Yuheng Li
-## used bootstrap class
+# Yuheng Li
+## used bootstrap class in log in page and create account page
 ###### card, container, model and toast
 modal, modal-dialog, modal-content, modal-header, modal-title, modal-body, modal-footer, toast-container, toast, toast-body, container, card, card-body
 ###### form
