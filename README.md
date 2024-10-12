@@ -1,5 +1,18 @@
 # Assignment-5---INFO6150-
 
+# MovieFinder
+###  MovieFinder is a web application that allows users to search for and discover various movies. This platform provides an easy-to-use interface for event searching and browsing, enhancing the user experience in finding and attending events.
+
+# Features
+
+* User authentication and account management
+* Advanced event search functionality
+* Responsive design for various devices
+* Event categorization and filtering
+* Location-based event discovery
+* User-friendly interface with Bootstrap components
+
+
 # Yuheng Li
 ## used bootstrap class in log in page and create account page
 ###### card, container, model and toast
