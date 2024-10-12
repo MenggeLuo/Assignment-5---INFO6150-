@@ -20,3 +20,8 @@ position-fixed, top-0, start-50, translate-middle-x, p-3, d-flex, align-items-ce
 # css for home.html element
 ## used bootstrap
 navbar with dropdown  ,collapse for popular movie,h1, text-underline,bg color for top movie
+
+# Yuxiao Lin
+## css adjustment & add card, footer part
+## used bootstrap
+card, list-group, btn, container
