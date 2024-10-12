@@ -1,7 +1,7 @@
 # Assignment-5---INFO6150-
 
 # MovieFinder
-###  MovieFinder is a web application that allows users to search for and discover various movies. This platform provides an easy-to-use interface for event searching and browsing, enhancing the user experience in finding and attending events.
+###  MovieFinder is a web application that allows users to search for and discover various movies. This platform provides an easy-to-use interface for event searching and browsing, or other actions that related to movies, enhancing the user experience in finding and attending events. Notice that more functionalities should be added in the future.
 
 # Features
 
