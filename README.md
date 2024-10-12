@@ -14,3 +14,9 @@ fade
 page-title
 ###### position, color, style
 position-fixed, top-0, start-50, translate-middle-x, p-3, d-flex, align-items-center, text-white, bg-danger, border-0, me-2 m-auto, mb-3, row, col-sm-3, col-sm-7 offset-sm-2, col-lg-12
+
+#Shuhan Jhang
+
+# css for home.html element
+## used bootstrap
+navbar with dropdown  ,collapse for popular movie,h1, text-underline,bg color for top movie
