@@ -50,3 +50,138 @@ card, list-group, btn, container
 ## home page in HTML
 ## used bootstrap
 Layout and Grid System, Navigation Components, Form Elements, Text Alignment and Spacing, Flex Layout Utilities, Carousel
+
+
+
+# Project Title: Movie Finder Application
+
+## Overview
+This is a full-stack web application that allows users to:
+- Register and log in securely using JWT-based authentication.
+- Search for movies using various criteria such as keywords, dates, and locations.
+- Access a personalized `Home` page after successful login.
+- Recover their accounts via a password recovery system (in development).
+
+## Features
+- **User Authentication**: Secure login and registration using email and password.
+- **JWT Authorization**: Only authenticated users can access protected routes (e.g., `Home` page).
+- **Captcha Verification**: Prevent automated requests during signup.
+- **Movie Search**: Search functionality with criteria like keyword, date, and location.
+- **Responsive Design**: Built with Bootstrap for a seamless experience across devices.
+- **Scalable Backend**: Backend API built with Node.js, Express, and MongoDB.
+
+---
+
+## Technologies Used
+
+### Frontend
+- **React**: For building the user interface.
+- **Bootstrap**: For responsive and aesthetic UI components.
+- **Axios**: For making API calls.
+
+### Backend
+- **Node.js & Express**: For server-side logic and API endpoints.
+- **MongoDB**: For storing user data.
+- **JSON Web Tokens (JWT)**: For secure user authentication and route protection.
+- **dotenv**: For managing environment variables securely.
+
+---
+
+## Prerequisites
+
+- **Node.js**: Ensure you have Node.js installed.
+- **MongoDB**: Set up a local or cloud MongoDB instance.
+- **npm**: For installing dependencies.
+
+---
+
+## Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/movie-finder.git
+   cd movie-finder
+   ```
+
+2. **Set up backend**:
+   - Navigate to the `backend` directory:
+     ```bash
+     cd backend
+     ```
+   - Install dependencies:
+     ```bash
+     npm install
+     ```
+   - Create a `.env` file and configure:
+     ```
+     PORT=5000
+     MONGO_URI=<Your MongoDB connection string>
+     JWT_SECRET=<Your JWT secret key>
+     ```
+   - Start the server:
+     ```bash
+     npm start
+     ```
+
+3. **Set up frontend**:
+   - Navigate to the `frontend` directory:
+     ```bash
+     cd frontend
+     ```
+   - Install dependencies:
+     ```bash
+     npm install
+     ```
+   - Create a `.env` file and configure:
+     ```
+     REACT_APP_API_URL=http://localhost:5000/api
+     ```
+   - Start the React application:
+     ```bash
+     npm start
+     ```
+
+---
+
+## Usage
+
+1. Open the app in your browser:
+   ```
+   http://localhost:3000
+   ```
+
+2. **Register**:
+   - Use a valid email address and password to create an account.
+
+3. **Login**:
+   - Log in using your registered credentials.
+   - Upon success, you’ll be redirected to the `Home` page.
+
+4. **Search Movies**:
+   - Use the search form to look for movies by keyword, date, and location.
+
+5. **Recover Password**:
+   - Navigate to the password recovery page from the login screen (functionality under development).
+
+---
+
+## Project Structure
+
+### Frontend
+- `/src/components`: Contains React components for `Login`, `Signup`, `Home`, `ForgotPassword`, and others.
+- `/src/api`: Axios API calls for communicating with the backend.
+- `/src/styles`: Custom styles and Bootstrap integration.
+
+### Backend
+- `/models`: MongoDB models (e.g., User model).
+- `/controllers`: Contains logic for handling API requests (e.g., login, registration).
+- `/services`: Business logic (e.g., user validation, password hashing).
+- `/middlewares`: Middleware for JWT authentication.
+- `/routes`: API endpoints for user-related actions.
+
+---
+
+## Features to Implement
+- Password reset functionality in the `ForgotPassword` component.
+- Enhanced search results with movie details fetched from a public API.
+- Profile management for users.
