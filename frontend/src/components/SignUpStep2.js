@@ -11,38 +11,38 @@ const SignUpStep2 = () => {
   const [showModal, setShowModal] = useState(false); // Control popup display
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const email = localStorage.getItem("email");
-    if (!email) {
-      navigate("/signup/step1"); // 如果邮箱不存在，重定向到 SignUpStep1
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const email = localStorage.getItem("email");
+  //   if (!email) {
+  //     navigate("/signup/step1"); // 如果邮箱不存在，重定向到 SignUpStep1
+  //   }
+  // }, [navigate]);
 
   const handleSignUp = async () => {
     const validationErrors = {};
     if (password.length < 8) {
-      validationErrors.password = "Password must be at least 8 characters.";
+        validationErrors.password = "Password must be at least 8 characters.";
     }
     if (password !== confirmPassword) {
-      validationErrors.confirmPassword = "Passwords do not match.";
+        validationErrors.confirmPassword = "Passwords do not match.";
     }
     if (Object.keys(validationErrors).length > 0) {
-      setError(validationErrors);
-      return;
+        setError(validationErrors);
+        return;
     }
 
     try {
-      const email = localStorage.getItem("email"); // Get the mailbox from localStorage
-      if (!email) {
-        setError({ email: "No email found. Please start from step 1." });
-        return;
-      }
-      await registerUser(email, password); // Call registration API
-      setShowModal(true); // A successful pop-up window is displayed
+        const tempToken = localStorage.getItem("tempToken"); // 从localStorage获取临时token
+        if (!tempToken) {
+            setError({ token: "No token found. Please verify your email again." });
+            return;
+        }
+        await registerUser(tempToken, password); // 调用注册API
+        setShowModal(true);
     } catch (err) {
-      setError({ server: err.response?.data?.error || "Registration failed." });
+        setError({ server: err.response?.data?.error || "Registration failed." });
     }
-  };
+};
 
   const handleModalClose = () => {
     setShowModal(false);

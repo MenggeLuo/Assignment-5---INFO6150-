@@ -5,9 +5,6 @@ const userApi = axios.create({
     withCredentials: true,
 });
 
-export const registerUser = (email, password) => {
-    return userApi.post("/register", { email, password });
-};
 
 export const loginUser = (email, password) => {
     return userApi.post("/login", { email, password });
@@ -15,4 +12,16 @@ export const loginUser = (email, password) => {
 
 export const checkEmailExists = (email) => {
     return userApi.post("/check-email", { email });
+};
+
+export const saveEmail = async (email) => {
+    return userApi.post("/save-email", { email });
+};
+
+export const verifyCode = async (email, code) => {
+    return userApi.post("/verify-code", { email, code });
+};
+
+export const registerUser = async (tempToken, password) => {
+    return userApi.post("/register", { tempToken, password });
 };

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Captcha from "./Captcha";
 import emailjs from "@emailjs/browser";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { checkEmailExists } from "../api";
+import { checkEmailExists,saveEmail, verifyCode } from "../api";
 
 const SignUpStep1 = () => {
   const [email, setEmail] = useState("");
@@ -74,67 +74,46 @@ const SignUpStep1 = () => {
     }
 
     try {
-        // 调用邮箱存在性检查 API
-        const response = await checkEmailExists(email);
-        console.log(response.data.message); // "Email is available."
+        await saveEmail(email); // 调用后端保存邮箱并发送验证码
+        setSending(false);
+        setEmailSent(true);
+        setError({});
+        console.log("Email saved and verification code sent!");
+        startCountdown(60);
     } catch (err) {
+        setSending(false);
         if (err.response?.status === 409) {
             setError({ email: "This email is already registered." });
-            return;
+        } else {
+            setError({ server: "Error sending email. Please try again later." });
         }
-        setError({ server: "Error checking email. Please try again later." });
-        return;
     }
-
-    // 如果邮箱不存在，发送验证码
-    setSending(true);
-    const code = generateEmailCode(); // 调用 generateEmailCode 生成验证码
-    setGeneratedEmailCode(code); // 将生成的验证码存储到状态中
-    emailjs
-        .send(
-            process.env.REACT_APP_EMAILJS_SERVICE_ID,
-            process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
-            {
-                to_name: email,
-                to_email: email,
-                verification_code: code, // 发送的验证码
-            },
-            process.env.REACT_APP_EMAILJS_PUBLIC_KEY
-        )
-        .then(() => {
-            setSending(false);
-            setEmailSent(true);
-            setError({});
-            console.log("Email sent successfully!");
-            startCountdown(60);
-        })
-        .catch((error) => {
-            setSending(false);
-            console.error("Error sending email:", error);
-            setError({ server: "Failed to send email. Please try again later." });
-        });
 };
 
 
   // Handle Next Step
-  const handleNext = () => {
+  const handleNext = async () => {
     const validationErrors = {};
 
-    // Validate Email Verification Code
-    console.log(emailVerificationInput)
-    console.log(generatedEmailCode)
-    if (emailVerificationInput !== generatedEmailCode) {
-      validationErrors.emailVerification = "Email verification code is incorrect.";
+    // 验证邮件验证码是否为空
+    if (!emailVerificationInput.trim()) {
+        validationErrors.emailVerification = "Email verification code is required.";
     }
 
-    setError(validationErrors);
-
-    if (Object.keys(validationErrors).length === 0) {
-      // Save email to localStorage or context
-      localStorage.setItem("email", email);
-      navigate("/signup/step2");
+    if (Object.keys(validationErrors).length > 0) {
+        setError(validationErrors);
+        return;
     }
-  };
+
+    try {
+        const response = await verifyCode(email, emailVerificationInput); // 调用后端验证验证码
+        const tempToken = response.data.tempToken; // 从后端获取临时Token
+        localStorage.setItem("tempToken", tempToken); // 将临时Token保存到localStorage
+        navigate("/signup/step2");
+    } catch (err) {
+        setError({ emailVerification: "Invalid or expired verification code. Please try again." });
+    }
+};
 
   return (
     <div className="container mt-5">

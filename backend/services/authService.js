@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const temporaryStore = {};
 
 const verifyToken = (req, res, next) => {
     const token = req.headers["authorization"]; // Gets the Token from the request header
