@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+.page-background {
+  background-image: url('./assets/theater.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}

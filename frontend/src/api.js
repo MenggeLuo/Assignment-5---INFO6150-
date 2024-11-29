@@ -10,9 +10,9 @@ export const loginUser = (email, password) => {
     return userApi.post("/login", { email, password });
 };
 
-export const checkEmailExists = (email) => {
-    return userApi.post("/check-email", { email });
-};
+// export const checkEmailExists = (email) => {
+//     return userApi.post("/check-email", { email });
+// };
 
 export const saveEmail = async (email) => {
     return userApi.post("/save-email", { email });

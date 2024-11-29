@@ -43,17 +43,17 @@ const saveEmailAndSendCode = async (req, res) => {
     try {
         const { email } = req.body;
 
-        // 检查邮箱是否已存在
+        // Check whether the mailbox already exists
         const exists = await userService.checkEmailExists(email);
         if (exists) {
             return res.status(409).json({ error: "This email is already registered." });
         }
 
-        // 生成验证码并存储
+        // Generate the verification code and store it
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         tempStorage[email] = { code, timestamp: Date.now() };
 
-        // 发送验证码邮件
+        // Send the verification code email
         await sendEmail(email, code);
 
         res.status(200).json({ message: "Verification code sent to email." });
@@ -77,7 +77,7 @@ const verifyCode = async (req, res) => {
             return res.status(400).json({ error: "Invalid verification code." });
         }
 
-        // 清除临时存储，生成临时token
+        // The temporary storage is cleared to generate a temporary token
         delete tempStorage[email];
         const tempToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
@@ -92,11 +92,11 @@ const register = async (req, res) => {
     try {
         const { tempToken, password } = req.body;
 
-        // 验证临时token
+        // Verify temporary token
         const decoded = jwt.verify(tempToken, process.env.JWT_SECRET);
         const email = decoded.email;
 
-        // 注册用户
+        // user register
         const user = await userService.registerUser(email, password);
         res.status(201).json({ message: "User registered successfully", user });
     } catch (error) {

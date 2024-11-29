@@ -5,7 +5,7 @@ const verifyToken = require("../services/authService");
 
 router.post("/register", register);
 router.post("/login", login);
-router.post("/check-email", checkEmail);
+// router.post("/check-email", checkEmail);
 router.get("/home", verifyToken, (req, res) => {
     res.status(200).json({ message: "Welcome to the Home page!", user: req.user });
 });

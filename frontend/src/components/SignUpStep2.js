@@ -11,12 +11,14 @@ const SignUpStep2 = () => {
   const [showModal, setShowModal] = useState(false); // Control popup display
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const email = localStorage.getItem("email");
-  //   if (!email) {
-  //     navigate("/signup/step1"); // 如果邮箱不存在，重定向到 SignUpStep1
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    // Check if the temporary token exists
+    const tempToken = localStorage.getItem("tempToken");
+    if (!tempToken) {
+      // If the temporary token does not exist, redirect to Step 1
+      navigate("/signup/step1");
+    }
+  }, [navigate]);
 
   const handleSignUp = async () => {
     const validationErrors = {};
@@ -32,12 +34,13 @@ const SignUpStep2 = () => {
     }
 
     try {
-        const tempToken = localStorage.getItem("tempToken"); // 从localStorage获取临时token
+        const tempToken = localStorage.getItem("tempToken"); // Gets a temporary token from localStorage
         if (!tempToken) {
             setError({ token: "No token found. Please verify your email again." });
             return;
         }
-        await registerUser(tempToken, password); // 调用注册API
+        await registerUser(tempToken, password);
+        localStorage.removeItem("tempToken");
         setShowModal(true);
     } catch (err) {
         setError({ server: err.response?.data?.error || "Registration failed." });
@@ -51,7 +54,7 @@ const SignUpStep2 = () => {
 
   return (
     <div className="container mt-5">
-      <div className="card p-4 mx-auto" style={{ maxWidth: "400px" }}>
+      <div className="card p-4 mx-auto" style={{ maxWidth: "400px",backgroundColor: "rgba(255, 255, 255, 0.7)" }}>
         <h2 className="text-center">Sign Up - Step 2</h2>
 
         {/* Password Field */}

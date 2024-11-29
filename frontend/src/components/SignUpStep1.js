@@ -1,40 +1,35 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Captcha from "./Captcha";
-import emailjs from "@emailjs/browser";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { checkEmailExists,saveEmail, verifyCode } from "../api";
+import {saveEmail, verifyCode } from "../api";
 
 const SignUpStep1 = () => {
   const [email, setEmail] = useState("");
   const [emailVerificationInput, setEmailVerificationInput] = useState("");
-  const [generatedEmailCode, setGeneratedEmailCode] = useState("");
   const [verificationInput, setVerificationInput] = useState(""); // Graphic verification code entered by the user
   const [captchaCode, setCaptchaCode] = useState(""); // Currently generated graphic verification code
-  const [emailSent, setEmailSent] = useState(false);
-  const [sending, setSending] = useState(false); // send state
+  const [emailSent, setEmailSent] = useState(false); // Mail sending status
+  const [sending, setSending] = useState(false); // Button send state
   const [countdown, setCountdown] = useState(0); // count down
+  const [resend, setResend] = useState(false); // Control button displays status
   const [error, setError] = useState({});
   const navigate = useNavigate();
 
-  // Validate email format
+  // Verification mailbox format
   const validateEmail = (email) => {
     const regex = /([\w\.+]+)@northeastern.edu/;
     return regex.test(email);
   };
 
-  // Generate a random 6-digit email verification code
-  const generateEmailCode = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  };
-
-  // Start countdown timer
+  // start the countdown
   const startCountdown = (seconds) => {
     setCountdown(seconds);
     const interval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
+          setResend(true); // Update button status after countdown ends
           return 0;
         }
         return prev - 1;
@@ -57,70 +52,75 @@ const SignUpStep1 = () => {
     setError({});
   };
 
-  // Handle Send Email Verification
+  // Process sending email verification codes
   const sendEmailVerification = async () => {
     const validationErrors = {};
     if (!validateEmail(email)) {
-        validationErrors.email = "Email must be a valid Northeastern email address.";
+      validationErrors.email = "Email must be a valid Northeastern email address.";
     }
     if (!verificationInput.trim()) {
-        validationErrors.captcha = "Captcha is required.";
+      validationErrors.captcha = "Captcha is required.";
     } else if (verificationInput.trim().toLowerCase() !== captchaCode.trim().toLowerCase()) {
-        validationErrors.captcha = "Captcha is incorrect. Please try again.";
+      validationErrors.captcha = "Captcha is incorrect. Please try again.";
     }
     if (Object.keys(validationErrors).length > 0) {
-        setError(validationErrors);
-        return;
+      setError(validationErrors);
+      return;
     }
 
     try {
-        await saveEmail(email); // 调用后端保存邮箱并发送验证码
-        setSending(false);
-        setEmailSent(true);
-        setError({});
-        console.log("Email saved and verification code sent!");
-        startCountdown(60);
+      setSending(true); // Set sending status
+      await saveEmail(email); // Call the back end to save the mailbox and send the verification code
+      setEmailSent(true);
+      setResend(false); // Reset button status
+      setError({});
+      console.log("Email saved and verification code sent!");
+      startCountdown(60); // start the countdown
     } catch (err) {
-        setSending(false);
-        if (err.response?.status === 409) {
-            setError({ email: "This email is already registered." });
-        } else {
-            setError({ server: "Error sending email. Please try again later." });
-        }
+      if (err.response?.status === 409) {
+        setError({ email: "This email is already registered." });
+      } else {
+        setError({ server: "Error sending email. Please try again later." });
+      }
+    } finally {
+      setSending(false); // Reset send status
     }
-};
+  };
 
-
-  // Handle Next Step
+  // Process next button
   const handleNext = async () => {
     const validationErrors = {};
-
-    // 验证邮件验证码是否为空
     if (!emailVerificationInput.trim()) {
-        validationErrors.emailVerification = "Email verification code is required.";
+      validationErrors.emailVerification = "Email verification code is required.";
     }
 
     if (Object.keys(validationErrors).length > 0) {
-        setError(validationErrors);
-        return;
+      setError(validationErrors);
+      return;
     }
 
     try {
-        const response = await verifyCode(email, emailVerificationInput); // 调用后端验证验证码
-        const tempToken = response.data.tempToken; // 从后端获取临时Token
-        localStorage.setItem("tempToken", tempToken); // 将临时Token保存到localStorage
-        navigate("/signup/step2");
+      const response = await verifyCode(email, emailVerificationInput); // Invoke the back-end verification code
+      const tempToken = response.data.tempToken; // Get a temporary Token from the backend
+      localStorage.setItem("tempToken", tempToken); // Save the temporary Token to localStorage
+      navigate("/signup/step2");
     } catch (err) {
-        setError({ emailVerification: "Invalid or expired verification code. Please try again." });
+      setError({ emailVerification: "Invalid or expired verification code. Please try again." });
     }
-};
+  };
 
   return (
     <div className="container mt-5">
-      <div className="card p-4 mx-auto" style={{ maxWidth: "400px" }}>
+      <div
+        className="card p-4 mx-auto"
+        style={{
+          maxWidth: "400px",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+        }}
+      >
         <h2 className="text-center">Sign Up - Step 1</h2>
 
-        {/* Email Field */}
+        {/* Mailbox input field */}
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email Address
@@ -135,28 +135,34 @@ const SignUpStep1 = () => {
           {error.email && <div className="text-danger">{error.email}</div>}
         </div>
 
-        {/* Captcha Component */}
+        {/* Graphic verification code component */}
         <Captcha
-          onValidate={(value) => setVerificationInput(value)} // Set the verification code entered by the user
+          onValidate={(value) => setVerificationInput(value)} // The verification code entered by the user
           setCaptchaCode={(code) => setCaptchaCode(code)} // Set the generated graphic verification code
         />
         {error.captcha && <div className="text-danger">{error.captcha}</div>}
 
-        {/* Send Email Button */}
+        {/* Send mail button */}
         <div className="d-flex align-items-center mb-3">
           <button
             className="btn btn-primary"
             onClick={sendEmailVerification}
-            disabled={sending || countdown > 0} // Prevent duplicate sending
+            disabled={sending || countdown > 0} // Disable button in sending or countdown
           >
-            {sending ? "Sending..." : countdown > 0 ? `Resend in ${countdown}s` : "Send Verification Code"}
+            {sending
+              ? "Sending..."
+              : countdown > 0
+              ? `Resend in ${countdown}s`
+              : resend
+              ? "Send Again"
+              : "Send Verification Code"}
           </button>
           {emailSent && !sending && (
             <span className="text-success ms-3">Verification code sent! Please check your email.</span>
           )}
         </div>
 
-        {/* Email Verification Code Field */}
+        {/* Email verification code input field */}
         {emailSent && (
           <div className="mb-3 mt-3">
             <label htmlFor="emailVerificationCode" className="form-label">
@@ -175,7 +181,7 @@ const SignUpStep1 = () => {
           </div>
         )}
 
-        {/* Next Button */}
+        {/* Next button */}
         <button
           className={`btn w-100 mt-2 ${emailSent ? "btn-primary" : "btn-secondary disabled"}`}
           onClick={handleNext}
@@ -184,7 +190,7 @@ const SignUpStep1 = () => {
           Next
         </button>
 
-        {/* Back to Login */}
+        {/* 返回登录按钮 */}
         <button className="btn btn-link mt-3" onClick={navigateToLogin}>
           Back to Login
         </button>

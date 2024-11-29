@@ -91,7 +91,7 @@ const Captcha = ({ onValidate, setCaptchaCode }) => {
 
   return (
     <div className="mb-3">
-      <label className="form-label">Verification Code</label>
+      <label className="form-label">Captcha</label>
       <div className="d-flex align-items-center">
         <canvas
           ref={canvasRef}

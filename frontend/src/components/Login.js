@@ -4,7 +4,9 @@ import Captcha from "./Captcha";
 import { loginUser } from "../api";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+
 const Login = () => {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
@@ -45,7 +47,7 @@ const Login = () => {
 
   return (
     <div className="container mt-5">
-      <div className="card p-4 mx-auto" style={{ maxWidth: "400px" }}>
+      <div className="card p-4 mx-auto" style={{ maxWidth: "400px",backgroundColor: "rgba(255, 255, 255, 0.7)"}}>
         <h2 className="text-center">Login</h2>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email Address</label>

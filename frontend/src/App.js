@@ -5,9 +5,11 @@ import SignUpStep1 from "./components/SignUpStep1";
 import SignUpStep2 from "./components/SignUpStep2";
 import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
+import "./App.css";
 
 const App = () => {
   return (
+    <div className="page-background">
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -18,7 +20,7 @@ const App = () => {
         <Route path="*" element={<Login />} />
       </Routes>
     </Router>
+    </div>
   );
 };
-
 export default App;
