@@ -30,4 +30,24 @@ const checkEmailExists = async (email) => {
     return !!existingUser; // Returns a Boolean value
 };
 
-module.exports = { registerUser, loginUser, checkEmailExists };
+const updatePassword = async (email, newPassword) => {
+    if (!email || !newPassword) {
+        throw new Error("Email and new password are required.");
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const updatedUser = await User.findOneAndUpdate(
+        { email },
+        { password: hashedPassword },
+        { new: true } 
+    );
+
+    if (!updatedUser) {
+        throw new Error("User not found.");
+    }
+
+    return updatedUser;
+};
+
+module.exports = { registerUser, loginUser, checkEmailExists, updatePassword };

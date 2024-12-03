@@ -25,3 +25,11 @@ export const verifyCode = async (email, code) => {
 export const registerUser = async (tempToken, password) => {
     return userApi.post("/register", { tempToken, password });
 };
+
+export const requestPasswordReset = async (email) => {
+    return userApi.post("/reset-password/request", { email });
+};
+
+export const resetPassword = async (tempToken, newPassword) => {
+    return userApi.post("/reset-password", { tempToken, newPassword });
+};
