@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script> -->
+    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.css">
+    <script src="bootstrap-5.3.3-dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="sign.css">
+    <link rel="icon" href="resource/imgage/moive.png">
+    <title>Sign Up</title>
+    <script type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+    <script type="text/javascript">
+      (function(){
+        emailjs.init({
+          publicKey: "efeIpbvvbrvnvcVBj",
+        });
+      })();
+    </script>
+  </head>
+
+  <body>
+  
+    <!-- show when program cannot sent email -->
+    <div class="modal fade" id="error-happened" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModalLabel">Something Unexpexted Happened!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            OOPS! <br>
+            Something Unexpexted Happened.<br><br>
+            Please try again or connect us:<br>
+            <a href="mailto:li.yuheng@northeastern.edu">li.yuheng@northeastern.edu</a><br>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- show when sent email -->
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+      <div id="email-sent-success" tabindex="-1" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            Email has sent. Please check.
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- show when email verification code is wrong-->
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+      <div id="email-code-incorrect" tabindex="-1" class="toast align-items-center text-white bg-warning border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            Your email verification code is wrong.
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- show when confriming email-->
+    <div class="modal fade" id="email-confirmed-success" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModalLabel">Email Confirmed!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Congratulation!<br><br>
+            Your email is confirmed!<br>
+            Let's set a password to finish the sign up.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- show when click back-->
+    <div class="modal fade" id="confirm-back-to-log" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Back</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            You are leaving this page.<br>
+            <b>You will lose all form you have finished.</b><br>
+            Do you want to continue?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" id="confirmBackToLog" onclick="signUpBack()">Confirm</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- show when confriming email-->
+    <div class="modal fade" id="sign-up-success" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModalLabel">Sign Up Finish!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Congratulation!<br><br>
+            Your have finished the sign up!<br>
+            Let's try your new account.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="signUpBack()">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+
+      <!-- sign up page 1 -->
+      <div class="log-container page active" id="page2 ">
+        <form>
+
+          <div class="mb-3">
+            <h2 class="page-title">Sign Up</h2>
+          </div>
+
+          <!-- email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="yourname@domain.com">
+            <div class="error" id="error-email">Please Enter a Correct Email</div>
+          </div>
+
+
+          <!-- verification-code -->
+          <div id="sign-up-garph-verification-code-field">
+            <label for="garph-verification-code" class="form-label">Finish the code to send the email</label>  
+            <div class="row  mb-3">
+              <div class="col-sm-3">
+                <canvas id="canvas" width="100" height="35" onclick="refreshCode()" 
+                style="border: 1px solid #ccc; border-radius: 5px;"></canvas>
+              </div>
+              <div class="col-sm-7 offset-sm-2">
+                <input type="text" value="" class="form-control" id ="garph-verification-code" maxlength="4">
+              </div>
+              <div class="error" id="error-garph-verification-code">Please Enter a Correct Verification Code</div>
+            </div>
+          </div>
+          
+
+          <!-- verification-code -->
+          <label for="email-verification-code" class="form-label">Email Verification Code</label>  
+          <div class="row mb-4">
+            <div class="col-sm-7 mb-1">
+              <input type="text" value="" class="form-control" id ="email-verification-code" maxlength="5">
+            </div>
+            <div class="offset-sm-2 col-sm-3 ">
+              <button type="button" class="btn btn-primary" style="width: 100%;" onclick="sendEmail()" id="send-email-button" disabled>Send</button>
+            </div>
+            <div class="feedback" id="email-verification-code-sent"></div>
+            <div class="error" id="error-email-verification-code">Your Email Code Is Incorrect</div>
+          </div>      
+          
+          <div class="mb-3">
+            <div class="row">
+              <div class="col-lg-12">
+                <button type="button" class="btn btn-primary" style="width: 100%;" disabled id="sign-up-1-continue-button" onclick="signUp1Continue()">Continue</button>
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+        <div class="mb-3">
+          <button type="button" class="btn btn-link sign-link-button" onclick='showConfirmBackToLog()'>&lt&lt Back </button>
+        </div>
+
+      </div>
+
+
+      <div class="log-container page" id="page3">
+        <form>
+
+          <div class="mb-3">
+            <h2 class="page-title">Sign Up</h2>
+          </div>
+
+          <!-- password -->
+          <div>
+            <label for="password" class="form-label">Choice a Password</label>                      
+            <input type="text" class="form-control" id="password-set">
+            <div class="error" id="error-password-set">Your Email Code Is Incorrect</div>
+          </div>
+
+          <!-- check password -->
+          <div class="mt-1 card" style="width: 100%" id="password-set-check">
+            <div class="card-body">
+            <div id="password-length" class="row card-text" style="border-top-left-radius: 5px; border-top-right-radius: 5px;">  
+              <div id="password-length-icon" class="col-1"></div>
+              <div class="col-11">Password should be 8 to 20 characters</div>
+            </div>
+            <div id="uppercase-letters" class="row card-text"> 
+              <div id="uppercase-letters-icon" class="col-1"></div>
+              <div class="col-11">Uppercase letters</div>
+            </div>
+            <div id="lowercase-letters" class="row card-text"> 
+              <div id="lowercase-letters-icon" class="col-1"></div>
+              <div class="col-11">Lowercase letters</div>
+            </div>
+            <div id="password-digit" class="row card-text" style="border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;"> 
+              <div id="password-digit-icon" class="col-1"></div>
+              <div class="col-11">Digit</div>
+            </div>
+          </div>
+          </div>
+
+          <!-- confirm password -->
+          <div class="mb-3 mt-2">
+            <label for="password" class="form-label">Confirm your Password</label>                      
+            <input type="text" class="form-control" id="password-confirm">
+            <div class="error" id="error-password-confirm">Password Confirm Should Be the Same as the Password </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="row">
+              <div class="col-lg-12">
+                <button type="button" class="btn btn-primary" style="width: 100%;" disabled id="sign-up-2-continue-button" onclick="signUp2Continue()" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+        <div class="mb-3">
+          <button type="button" class="btn btn-link sign-link-button" onclick='showConfirmBackToLog()'>&lt&lt Back </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- <button onclick="showPage(3)">1</button>
+    <button onclick="aaaa()">2</button> -->
+
+    <script src="sign-up.js"></script>
+  </body>
+</html>
