@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
-const registerUser = async (email, password) => {
+const registerUser = async (email, password, username) => {
     // Check whether a user with the same mailbox already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -9,9 +9,14 @@ const registerUser = async (email, password) => {
     }
 
     // Create a new user
-    const user = new User({ email, password });
+    const user = new User({ email, password, username,});
     await user.save();
     return user;
+};
+
+const isUsernameUnique = async (username) => {
+    const user = await User.findOne({ username });
+    return !user;
 };
 
 const loginUser = async (email, password) => {
@@ -30,24 +35,4 @@ const checkEmailExists = async (email) => {
     return !!existingUser; // Returns a Boolean value
 };
 
-const updatePassword = async (email, newPassword) => {
-    if (!email || !newPassword) {
-        throw new Error("Email and new password are required.");
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    const updatedUser = await User.findOneAndUpdate(
-        { email },
-        { password: hashedPassword },
-        { new: true } 
-    );
-
-    if (!updatedUser) {
-        throw new Error("User not found.");
-    }
-
-    return updatedUser;
-};
-
-module.exports = { registerUser, loginUser, checkEmailExists, updatePassword };
+module.exports = { registerUser, isUsernameUnique, loginUser, checkEmailExists };

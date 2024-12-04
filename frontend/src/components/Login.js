@@ -31,7 +31,7 @@ const Login = () => {
       const response = await loginUser(email, password);
       console.log("Login successful", response.data);
       localStorage.setItem("token", response.data.token);
-      navigate("/home");
+      navigate("/comments");
     } catch (err) {
       setError({ login: err.response?.data?.error || "Login failed" });
     }

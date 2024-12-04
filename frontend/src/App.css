@@ -43,6 +43,14 @@
   background-position: center;
   background-repeat: no-repeat;
   width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh; /* 修改为 min-height */
+  overflow: auto; /* 允许滚动 */
 }
+
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 防止横向滚动条 */
+}
+
