@@ -1,5 +1,5 @@
 const Movie = require('../models/Movie');
-const { MOVIES } = require('../util/mockDataBase');
+
 
 // Get all movies
 exports.getAllMovies = async (req, res) => {
