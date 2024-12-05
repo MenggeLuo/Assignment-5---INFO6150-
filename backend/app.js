@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const bodyParser = require("body-parser");
+const allRoutes = require("./routes/index");
 
 const app = express();
 connectDB();
@@ -17,7 +18,8 @@ app.use(
 );
 
 app.use(bodyParser.json());
-app.use("/api/users", userRoutes);
+//app.use("/api/users", userRoutes);
+app.use("/api", allRoutes);
 
 const PORT = process.env.PORT || 5000; // Use the port configuration in.env
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
