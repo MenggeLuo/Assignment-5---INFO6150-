@@ -6,6 +6,7 @@ import NavigationBar from "./home/NavigationBar";
 const Home = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [movies, setMovies] = useState([]);  
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -14,18 +15,24 @@ const Home = () => {
             return;
         }
 
-        // Token
-        axios
-            .get("http://localhost:5000/api/users/home", {
+        
+        Promise.all([
+            axios.get("http://localhost:5000/api/users/home", {
                 headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((response) => {
-                console.log(response.data.message);
+            }),
+            axios.get("http://localhost:5000/api/movies/gallery")  
+        ])
+            .then(([authResponse, moviesResponse]) => {
+                console.log(authResponse.data.message);
+                setMovies(moviesResponse.data.slice(0, 6)); 
                 setLoading(false);
             })
             .catch((error) => {
-                console.error("Unauthorized:", error);
-                navigate("/login");
+                console.error("Error:", error);
+                if (error.response?.status === 401) {
+                    navigate("/login");
+                }
+                setLoading(false);
             });
     }, [navigate]);
 
@@ -36,6 +43,10 @@ const Home = () => {
         } catch (error) {
             console.error("Error getting random movie:", error);
         }
+    };
+
+    const handleMovieClick = (movieId) => {
+        navigate(`/movie/${movieId}`);
     };
 
     if (loading) {
@@ -59,18 +70,31 @@ const Home = () => {
                 <div className="card shadow-sm mb-5">
                     <div className="card-body">
                         <div className="gallery-section p-5 bg-light rounded">
-                            <h2 className="text-center mb-4">Gallery</h2>
+                            <h2 className="text-center mb-4">Popular Movies</h2>
                             <div className="row row-cols-1 row-cols-md-3 g-4">
-                                {[1, 2, 3].map((num) => (
-                                    <div key={num} className="col">
-                                        <div className="card h-100 border-0 shadow-sm hover-shadow">
+                                {movies.map((movie) => (
+                                    <div key={movie.id} className="col">
+                                        <div 
+                                            className="card h-100 border-0 shadow-sm hover-shadow"
+                                            onClick={() => handleMovieClick(movie.id)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
                                             <div className="card-body text-center">
                                                 <img 
-                                                    src={`/api/placeholder/300/400`}
-                                                    alt="Movie poster"
+                                                    src={movie.poster || `/api/placeholder/300/400`}
+                                                    alt={movie.title}
                                                     className="img-fluid rounded mb-3"
+                                                    style={{ height: '300px', objectFit: 'cover' }}
                                                 />
-                                                <h5 className="card-title">Featured Movie</h5>
+                                                <h5 className="card-title">{movie.title}</h5>
+                                                <div className="d-flex justify-content-between align-items-center mt-2">
+                                                    <small className="text-muted">
+                                                        {new Date(movie.releaseDate).getFullYear()}
+                                                    </small>
+                                                    <small className="text-warning">
+                                                        <i className="bi bi-star-fill"></i> {movie.rating}
+                                                    </small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -80,7 +104,7 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Random Movie Section */}
+                {/* Random Movie Section -  */}
                 <div className="card shadow-sm">
                     <div className="card-body text-center p-5">
                         <h2 className="mb-4">Discover Something New</h2>
@@ -95,7 +119,7 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Custom CSS */}
+            {/* Custom CSS -  */}
             <style jsx="true">{`
                 .hover-shadow:hover {
                     transform: translateY(-5px);

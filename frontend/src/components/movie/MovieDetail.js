@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavigationBar from '../home/NavigationBar';
 
+
 const MovieDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -19,20 +20,58 @@ const MovieDetail = () => {
 
         const fetchMovieDetails = async () => {
             try {
-                const [movieRes, commentsRes] = await Promise.all([
-                    axios.get(`http://localhost:5000/api/movies/${id}`, {
+                // 获取电影详情和评论
+                const [authCheck, movieRes] = await Promise.all([
+                    // 验证用户token
+                    axios.get("http://localhost:5001/api/users/validate", {
                         headers: { Authorization: `Bearer ${token}` }
                     }),
-                    axios.get(`http://localhost:5000/api/movies/${id}/comments`, {
+                    // 获取TMDB电影详情
+                    axios.get(`http://localhost:5001/api/movies/${id}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     })
                 ]);
 
-                setMovie(movieRes.data);
-                setComments(commentsRes.data.slice(0, 3)); // get first 3 comments
+                const movieData = movieRes.data;
+                
+                // 转换电影数据格式
+                const formattedMovie = {
+                    id: movieData.id,
+                    title: movieData.title,
+                    description: movieData.overview,
+                    poster: movieData.poster_path 
+                        ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}`
+                        : null,
+                    rating: movieData.vote_average.toFixed(1),
+                    duration: movieData.runtime,
+                    releaseDate: new Date(movieData.release_date).toLocaleDateString(),
+                    language: movieData.original_language.toUpperCase(),
+                    category: movieData.genres?.map(genre => genre.name).join(', ')
+                };
+
+                setMovie(formattedMovie);
+
+                // 获取评论 (暂时使用模拟数据，后续可以接入真实评论系统)
+                const mockComments = [
+                    {
+                        username: "User1",
+                        content: "Great movie!",
+                        date: new Date()
+                    },
+                    {
+                        username: "User2",
+                        content: "Highly recommended!",
+                        date: new Date()
+                    }
+                ];
+                setComments(mockComments);
+                
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching movie details:", error);
+                if (error.response?.status === 401) {
+                    navigate("/login");
+                }
                 setLoading(false);
             }
         };
