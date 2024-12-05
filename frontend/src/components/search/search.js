@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavigationBar from '../home/NavigationBar';
 
+
 const Search = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -17,36 +18,50 @@ const Search = () => {
             navigate("/login");
             return;
         }
-
         const searchMovies = async () => {
             setLoading(true);
             try {
                 let endpoint;
                 switch(searchType) {
                     case 'tag':
-                        endpoint = `/api/movies/search-by-tag?tag=${query}`;
+                        endpoint = `/genre`; 
                         break;
                     case 'rank':
-                        endpoint = '/api/movies/ranked';
+                        endpoint = `/discover/movie?sort_by=vote_average.desc`; 
                         break;
                     default:
-                        endpoint = `/api/movies/search?title=${query}`;
+                        endpoint = `/search/movie?query=${query}`; 
                 }
                 
                 const response = await axios.get(
-                    `http://localhost:5000${endpoint}`,
+                    `http://localhost:5001/api/movies${endpoint}`,
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }
                 );
-                setMovies(response.data);
+    
+                
+                const formattedMovies = response.data.results.map(movie => ({
+                    id: movie.id,
+                    title: movie.title,
+                    poster: movie.poster_path 
+                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                        : null,
+                    rating: movie.vote_average.toFixed(1),
+                    releaseDate: movie.release_date
+                }));
+    
+                setMovies(formattedMovies);
                 setLoading(false);
             } catch (error) {
                 console.error("Error searching movies:", error);
+                if (error.response?.status === 401) {
+                    navigate("/login");
+                }
                 setLoading(false);
             }
         };
-
+    
         searchMovies();
     }, [searchParams, searchType, navigate, query]);
 
@@ -72,7 +87,7 @@ const Search = () => {
                                         style={{
                                             borderRadius: "20px 0 0 20px",
                                             border: "1px solid #ddd",
-                                            fontSize: "16px" // 防止iOS自动缩放
+                                            fontSize: "16px" 
                                         }}
                                     />
                                     <button 
@@ -88,7 +103,7 @@ const Search = () => {
                             </div>
                         </div>
 
-                        {/* Filter Buttons - 移动端水平滚动 */}
+                        {/* Filter Buttons  */}
                         <div className="filter-scroll">
                             <div className="d-flex gap-2">
                                 <button 
