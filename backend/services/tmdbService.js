@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { TMDB_CONFIG } from '../config/tmdb';
+const axios = require('axios');
+const TMDB_CONFIG = require('../config/tmdb');
 
 const tmdbAxios = axios.create({
     baseURL: TMDB_CONFIG.BASE_URL,
@@ -10,7 +10,7 @@ const tmdbAxios = axios.create({
 });
 
 
-export const getMovies = async (page = 1) => {
+const getMovies = async (page = 1) => {
     try {
         const response = await tmdbAxios.get('/discover/movie', {
             params: {
@@ -37,7 +37,7 @@ export const getMovies = async (page = 1) => {
 };
 
 
-export const searchMovies = async (query) => {
+const searchMovies = async (query) => {
     try {
         const response = await tmdbAxios.get('/search/movie', {
             params: {
@@ -65,7 +65,7 @@ export const searchMovies = async (query) => {
 };
 
 
-export const getRankedMovies = async () => {
+const getRankedMovies = async () => {
     try {
         const response = await tmdbAxios.get('/discover/movie', {
             params: {
@@ -92,7 +92,7 @@ export const getRankedMovies = async () => {
 };
 
 
-export const getMoviesByDuration = async () => {
+const getMoviesByDuration = async () => {
     try {
         const response = await tmdbAxios.get('/discover/movie', {
             params: {
@@ -119,7 +119,7 @@ export const getMoviesByDuration = async () => {
 };
 
 
-export const getMovieDetails = async (movieId) => {
+const getMovieDetails = async (movieId) => {
     try {
         const response = await tmdbAxios.get(`/movie/${movieId}`);
         return {
@@ -142,7 +142,7 @@ export const getMovieDetails = async (movieId) => {
 };
 
 
-export const getMoviesByCategory = async (genreId) => {
+const getMoviesByCategory = async (genreId) => {
     try {
         const response = await tmdbAxios.get('/discover/movie', {
             params: {
@@ -167,3 +167,5 @@ export const getMoviesByCategory = async (genreId) => {
         return [];
     }
 };
+
+module.exports = { getMovies, searchMovies, getRankedMovies, getMoviesByDuration, getMovieDetails, getMoviesByCategory};
