@@ -122,14 +122,13 @@ const MovieDetail = () => {
                                     </div>
                                 ))}
                             </div>
-                            {comments.length > 3 && (
-                                <div className="view-comments-container">
-                                    <button className="view-comments-btn" onClick={handleViewDetails}>
-                                        View More Comments
-                                    </button>
-                                </div>
-                            )}
+                            <div className="view-comments-container">
+                                <button className="view-comments-btn" onClick={handleViewDetails}>
+                                    {comments.length > 3 ? "View More Comments" : "Add Comment"}
+                                </button>
+                            </div>
                         </section>
+
 
                         <div className="booking-button-container">
                             <button 
@@ -263,42 +262,52 @@ const MovieDetail = () => {
                     margin-top: 20px;
                 }
 
-                .view-comments-btn {
-                    background: linear-gradient(90deg, #ff7a18, #ffb53a);
+                    .view-comments-btn {
+                    display: inline-block;
+                    background: #4caf50; /* 绿色按钮 */
                     color: white;
                     border: none;
-                    padding: 12px 25px;
+                    padding: 15px 40px; /* 统一内边距 */
                     border-radius: 25px;
                     font-size: 1rem;
+                    font-weight: 500;
                     cursor: pointer;
                     transition: transform 0.3s ease, background-color 0.3s ease;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                }
-
-                .view-comments-btn:hover {
-                    transform: scale(1.05);
-                    background: linear-gradient(90deg, #e2650d, #e29f2a);
-                }
-
-                .booking-button-container {
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影 */
                     text-align: center;
                 }
 
+                .view-comments-btn:hover {
+                    transform: scale(1.05); /* 鼠标悬停效果 */
+                    background: #45a049; /* 悬停绿色 */
+                }
+
                 .book-tickets-btn {
-                    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+                    display: inline-block;
+                    background: #ff5722; /* 橙色按钮 */
                     color: white;
                     border: none;
-                    padding: 15px 40px;
+                    padding: 15px 40px; /* 统一内边距 */
                     border-radius: 25px;
-                    font-size: 1.1rem;
+                    font-size: 1rem;
                     font-weight: 500;
                     cursor: pointer;
-                    transition: transform 0.2s;
+                    transition: transform 0.3s ease, background-color 0.3s ease;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影 */
+                    text-align: center;
                 }
 
                 .book-tickets-btn:hover {
-                    transform: translateY(-2px);
+                    transform: scale(1.05); /* 鼠标悬停效果 */
+                    background: #e64a19; /* 悬停橙色 */
                 }
+
+                .view-comments-container,
+                .booking-button-container {
+                    text-align: center;
+                    margin-top: 20px; /* 按钮组的外边距 */
+                }
+                
             `}</style>
         </>
     );
