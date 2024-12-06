@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const bodyParser = require("body-parser");
 const allRoutes = require("./routes/index");
+const commentRoutes = require("./routes/commentRoutes");
 
 const app = express();
 connectDB();
@@ -20,6 +21,9 @@ app.use(
 app.use(bodyParser.json());
 //app.use("/api/users", userRoutes);
 app.use("/api", allRoutes);
+
+app.use("/api/users", userRoutes);
+app.use("/api/comments", commentRoutes);
 
 const PORT = process.env.PORT || 5002; // Use the port configuration in.env
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

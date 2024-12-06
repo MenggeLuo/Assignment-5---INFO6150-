@@ -13,9 +13,8 @@ const login = async (req, res) => {
         }
         const user = await userService.loginUser(email, password);
 
-        // Generate tokens using JWT signatures
         const token = jwt.sign(
-            { id: user._id, email: user.email }, // payload
+            { id: user._id, email: user.email }, 
             process.env.JWT_SECRET, // secret key
             { expiresIn: "1h" } // expiration time
         );
@@ -96,6 +95,15 @@ const register = async (req, res) => {
         const decoded = jwt.verify(tempToken, process.env.JWT_SECRET);
         const email = decoded.email;
 
+        let username = email.split("@")[0];
+
+        // Ensure username is unique
+        let isUnique = await userService.isUsernameUnique(username);
+        while (!isUnique) {
+            username = `${username}${Math.floor(1000 + Math.random() * 9000)}`;
+            isUnique = await userService.isUsernameUnique(username);
+        }
+        
         // user register
         const user = await userService.registerUser(email, password);
         res.status(201).json({ message: "User registered successfully", user });
@@ -146,5 +154,25 @@ const requestPasswordReset = async (req, res) => {
 };
 
 
-module.exports = { saveEmailAndSendCode, verifyCode, register, login, checkEmail, resetPassword, requestPasswordReset };
+const deleteUserByEmail = async (req, res) => {
+    try {
+        const { email } = req.body; 
+
+        if (!email) {
+            return res.status(400).json({ error: "Email is required." });
+        }
+
+        const user = await User.findOneAndDelete({ email });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.status(200).json({ message: "User deleted successfully", user });
+    } catch (error) {
+        console.error("Error deleting user by email:", error);
+        res.status(500).json({ error: "Error deleting user. Please try again later." });
+    }
+};
+
+module.exports = { saveEmailAndSendCode, verifyCode, register, login, checkEmail, resetPassword, requestPasswordReset, deleteUserByEmail };
 

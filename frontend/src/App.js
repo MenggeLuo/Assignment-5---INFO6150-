@@ -10,6 +10,7 @@ import MovieDetail from "./components/movie/MovieDetail";
 import BookingPage from "./components/booking/BookingPage";
 import BookingConfirmation from "./components/booking/BookingConfirmation";
 import MyTickets from './components/MyTickets';
+import Comments from "./components/CommentsPage";
 import "./App.css";
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
+          <Route path="/comments/:id" element={<Comments/>} />
           <Route path="/booking/:id" element={<BookingPage />} />
           <Route path="/booking/confirmation" element={<BookingConfirmation />} />
           <Route path="/my-tickets" element={<MyTickets />} />

@@ -11,6 +11,12 @@ const MyTickets = () => {
     const [cancellingId, setCancellingId] = useState(null);
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+            if (!token) {
+                navigate("/login");
+                return;
+            }
+
         fetchTickets();
     }, []);
 

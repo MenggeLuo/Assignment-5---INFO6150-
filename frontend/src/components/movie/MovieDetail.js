@@ -3,25 +3,29 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavigationBar from '../home/NavigationBar';
 
+const COMMENTS_API_URL = process.env.REACT_APP_COMMENTS_API_URL;
+
 const MovieDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [movie, setMovie] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [comments] = useState([
-        {
-            username: "User1",
-            content: "Great movie!",
-            date: "2024/12/6"
-        },
-        {
-            username: "User2",
-            content: "Highly recommended!",
-            date: "2024/12/6"
+    const [comments, setComments] = useState([]);
+    const handleViewDetails = () => {
+        if (!id) {
+            console.error("No movie ID found, cannot navigate to comments.");
+            return;
         }
-    ]);
+        navigate(`/comments/${id}`);
+    };
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+
         const fetchMovieDetails = async () => {
             try {
                 const response = await axios.get(`http://www.omdbapi.com/?apikey=db914358&i=${id}&plot=full`);
@@ -35,7 +39,20 @@ const MovieDetail = () => {
             }
         };
 
+        const fetchComments = async () => {
+            try {
+                const response = await axios.get(`${COMMENTS_API_URL}`, {
+                    params: { movieId: id },
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }, 
+                });
+                setComments(response.data.comments);
+            } catch (error) {
+                console.error("Error fetching comments:", error.response?.data || error.message);
+            }
+        };
+
         fetchMovieDetails();
+        fetchComments();
     }, [id]);
 
     if (loading) {
@@ -93,16 +110,25 @@ const MovieDetail = () => {
                         <section className="comments-section">
                             <h2>Recent Comments</h2>
                             <div className="comments-list">
-                                {comments.map((comment, index) => (
+                                {comments.slice(0, 3).map((comment, index) => (
                                     <div key={index} className="comment-card">
                                         <div className="comment-header">
                                             <span className="username">{comment.username}</span>
-                                            <span className="date">{comment.date}</span>
+                                            <span className="date">
+                                                {new Date(comment.date).toLocaleDateString()}
+                                            </span>
                                         </div>
                                         <p className="comment-content">{comment.content}</p>
                                     </div>
                                 ))}
                             </div>
+                            {comments.length > 3 && (
+                                <div className="view-comments-container">
+                                    <button className="view-comments-btn" onClick={handleViewDetails}>
+                                        View More Comments
+                                    </button>
+                                </div>
+                            )}
                         </section>
 
                         <div className="booking-button-container">
@@ -124,17 +150,16 @@ const MovieDetail = () => {
                 }
 
                 .movie-detail-container {
-                    height: calc(100vh - 56px); /* Subtract navbar height */
+                    height: calc(100vh - 56px);
                     overflow-y: auto;
                     background-color: #f5f5f5;
                     padding: 20px;
-                    -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
                 }
 
                 .content-wrapper {
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding-bottom: 40px; /* Add bottom padding for last element */
+                    padding-bottom: 40px;
                 }
 
                 .movie-header {
@@ -185,44 +210,12 @@ const MovieDetail = () => {
                     background: #f7b731;
                 }
 
-                .movie-details {
-                    flex-grow: 1;
-                }
-
-                .movie-details h1 {
-                    font-size: 2.5rem;
-                    margin-bottom: 15px;
-                }
-
-                .meta-info {
-                    display: flex;
-                    gap: 20px;
-                    color: #666;
-                }
-
                 .main-content {
                     background: white;
                     border-radius: 10px;
                     padding: 30px;
                     margin-bottom: 20px;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                }
-
-                .synopsis-section {
-                    margin-bottom: 40px;
-                }
-
-                .synopsis-section h2 {
-                    font-size: 1.5rem;
-                    margin-bottom: 20px;
-                    color: #333;
-                }
-
-                .synopsis-section p {
-                    line-height: 1.6;
-                    color: #444;
-                    margin-bottom: 20px;
-                    white-space: pre-wrap; /* Preserve line breaks */
                 }
 
                 .comments-section {
@@ -240,6 +233,7 @@ const MovieDetail = () => {
                     border-radius: 8px;
                     padding: 15px;
                     margin-bottom: 15px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 }
 
                 .comment-header {
@@ -249,18 +243,41 @@ const MovieDetail = () => {
                 }
 
                 .username {
-                    font-weight: 500;
+                    font-weight: 600;
                     color: #333;
                 }
 
                 .date {
-                    color: #666;
+                    color: #888;
                     font-size: 0.9rem;
                 }
 
                 .comment-content {
                     margin: 0;
                     color: #444;
+                    line-height: 1.6;
+                }
+
+                .view-comments-container {
+                    text-align: center;
+                    margin-top: 20px;
+                }
+
+                .view-comments-btn {
+                    background: linear-gradient(90deg, #ff7a18, #ffb53a);
+                    color: white;
+                    border: none;
+                    padding: 12px 25px;
+                    border-radius: 25px;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    transition: transform 0.3s ease, background-color 0.3s ease;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }
+
+                .view-comments-btn:hover {
+                    transform: scale(1.05);
+                    background: linear-gradient(90deg, #e2650d, #e29f2a);
                 }
 
                 .booking-button-container {
@@ -281,32 +298,6 @@ const MovieDetail = () => {
 
                 .book-tickets-btn:hover {
                     transform: translateY(-2px);
-                }
-
-                @media (max-width: 768px) {
-                    .movie-detail-container {
-                        padding: 10px;
-                    }
-
-                    .movie-info {
-                        flex-direction: column;
-                    }
-
-                    .poster-container {
-                        width: 100%;
-                        max-width: 300px;
-                        margin: 0 auto;
-                    }
-
-                    .movie-details h1 {
-                        font-size: 2rem;
-                        text-align: center;
-                    }
-
-                    .meta-info {
-                        justify-content: center;
-                        flex-wrap: wrap;
-                    }
                 }
             `}</style>
         </>
