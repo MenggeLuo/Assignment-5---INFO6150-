@@ -7,12 +7,13 @@ import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
 import Search from "./components/search/search";
 import MovieDetail from "./components/movie/MovieDetail";
+import BookingPage from "./components/booking/BookingPage";
+import BookingConfirmation from "./components/booking/BookingConfirmation";
 import "./App.css";
 
 const App = () => {
   return (
     <div className="page-background">
-
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -22,10 +23,11 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
+          <Route path="/booking/:id" element={<BookingPage />} />
+          <Route path="/booking/confirmation" element={<BookingConfirmation />} />
           <Route path="*" element={<Login />} />
         </Routes>
       </Router>
-
     </div>
   );
 };

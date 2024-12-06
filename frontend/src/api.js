@@ -33,3 +33,36 @@ export const requestPasswordReset = async (email) => {
 export const resetPassword = async (tempToken, newPassword) => {
     return userApi.post("/reset-password", { tempToken, newPassword });
 };
+
+export const getTheaterShowtimes = (movieId, date) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/bookings/showtimes/${movieId}`, {
+        params: { date },
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    });
+};
+
+export const createBooking = (bookingData) => {
+    return axios.post(`${process.env.REACT_APP_API_URL}/bookings`, bookingData, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    });
+};
+
+export const getBookingDetails = (bookingId) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/bookings/${bookingId}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    });
+};
+
+export const getUserBookings = () => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/bookings/user/history`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    });
+};
