@@ -55,8 +55,10 @@ const CommentsPage = () => {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {
+                const { comments, total } = response.data;
                 setComments(response.data.comments); 
-                setTotalPages(Math.ceil(response.data.total / commentsPerPage));
+                const computedTotalPages = Math.max(1, Math.ceil(total / commentsPerPage));
+                setTotalPages(computedTotalPages);
             })
             .catch((error) => {
                 console.error("Error fetching comments:", error.response?.data || error.message);

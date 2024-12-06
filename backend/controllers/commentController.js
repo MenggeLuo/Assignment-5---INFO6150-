@@ -13,7 +13,7 @@ const getComments = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10; 
         const skip = (page - 1) * limit; 
 
-        const total = await Comment.countDocuments();
+        const total = await Comment.countDocuments({ movieId });
 
         const comments = await Comment.find({ movieId })
             .sort({ createdAt: -1 })
