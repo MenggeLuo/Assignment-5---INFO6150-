@@ -264,48 +264,48 @@ const MovieDetail = () => {
 
                     .view-comments-btn {
                     display: inline-block;
-                    background: #4caf50; /* 绿色按钮 */
+                    background: #4caf50; 
                     color: white;
                     border: none;
-                    padding: 15px 40px; /* 统一内边距 */
+                    padding: 15px 40px; 
                     border-radius: 25px;
                     font-size: 1rem;
                     font-weight: 500;
                     cursor: pointer;
                     transition: transform 0.3s ease, background-color 0.3s ease;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影 */
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
                     text-align: center;
                 }
 
                 .view-comments-btn:hover {
-                    transform: scale(1.05); /* 鼠标悬停效果 */
-                    background: #45a049; /* 悬停绿色 */
+                    transform: scale(1.05);
+                    background: #45a049;
                 }
 
                 .book-tickets-btn {
                     display: inline-block;
-                    background: #ff5722; /* 橙色按钮 */
+                    background: #ff5722; 
                     color: white;
                     border: none;
-                    padding: 15px 40px; /* 统一内边距 */
+                    padding: 15px 40px; 
                     border-radius: 25px;
                     font-size: 1rem;
                     font-weight: 500;
                     cursor: pointer;
                     transition: transform 0.3s ease, background-color 0.3s ease;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影 */
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
                     text-align: center;
                 }
 
                 .book-tickets-btn:hover {
-                    transform: scale(1.05); /* 鼠标悬停效果 */
-                    background: #e64a19; /* 悬停橙色 */
+                    transform: scale(1.05);
+                    background: #e64a19; 
                 }
 
                 .view-comments-container,
                 .booking-button-container {
                     text-align: center;
-                    margin-top: 20px; /* 按钮组的外边距 */
+                    margin-top: 20px;
                 }
                 
             `}</style>
