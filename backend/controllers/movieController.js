@@ -41,6 +41,7 @@ exports.searchMovies = async (req, res) => {
 exports.getMovieById = async (req, res) => {
     try {
         const movieId = req.params.id;
+        console.log("movieId", movieId);
         const movie = await tmdbService.getMovieDetails(movieId);
         if (!movie) {
             return res.status(404).json({ message: 'Movie not found' });

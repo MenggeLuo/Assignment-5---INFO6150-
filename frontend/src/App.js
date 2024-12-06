@@ -5,7 +5,7 @@ import SignUpStep1 from "./components/SignUpStep1";
 import SignUpStep2 from "./components/SignUpStep2";
 import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
-import Search from "./components/search/search";
+import Search from "./components/search/search-alt";
 import MovieDetail from "./components/movie/MovieDetail";
 import BookingPage from "./components/booking/BookingPage";
 import BookingConfirmation from "./components/booking/BookingConfirmation";
