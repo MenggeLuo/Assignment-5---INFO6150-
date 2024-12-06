@@ -9,6 +9,7 @@ import Search from "./components/search/search-alt";
 import MovieDetail from "./components/movie/MovieDetail";
 import BookingPage from "./components/booking/BookingPage";
 import BookingConfirmation from "./components/booking/BookingConfirmation";
+import MyTickets from './components/MyTickets';
 import "./App.css";
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/movie/:id" element={<MovieDetail />} />
           <Route path="/booking/:id" element={<BookingPage />} />
           <Route path="/booking/confirmation" element={<BookingConfirmation />} />
+          <Route path="/my-tickets" element={<MyTickets />} />
           <Route path="*" element={<Login />} />
         </Routes>
       </Router>

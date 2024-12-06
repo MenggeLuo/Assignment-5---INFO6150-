@@ -1,79 +1,108 @@
-const Movie = require('../models/Movie');
-const tmdbService = require('../services/tmdbService');
+const axios = require('axios');
+const OMDB_CONFIG = {
+    API_KEY: 'db914358',
+    BASE_URL: 'http://www.omdbapi.com'
+};
 
 exports.getAllMovies = async (req, res) => {
     try {
-        // 从TMDB获取电影列表
-        const movies = await tmdbService.getMovies();
-        res.status(200).json({ results: movies });
+        const response = await axios.get(`${OMDB_CONFIG.BASE_URL}/?apikey=${OMDB_CONFIG.API_KEY}&s=movie&type=movie`);
+        if (response.data.Response === "True") {
+            const movies = response.data.Search.map(movie => ({
+                id: movie.imdbID,
+                title: movie.Title,
+                poster: movie.Poster !== "N/A" ? movie.Poster : null,
+                year: movie.Year
+            }));
+            res.status(200).json({ results: movies });
+        } else {
+            res.status(200).json({ results: [] });
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
 exports.searchMovies = async (req, res) => {
-    const { query, type } = req.query;
+    const { query } = req.query;
     try {
-        let movies;
-        
-        switch (type) {
-            case 'rank':
-                movies = await tmdbService.getRankedMovies();
-                break;
-            case 'duration':
-                movies = await tmdbService.getMoviesByDuration();
-                break;
-            case 'category':
-                movies = await tmdbService.getMoviesByCategory(query);
-                break;
-            default:
-                movies = query 
-                    ? await tmdbService.searchMovies(query)
-                    : await tmdbService.getMovies();
+        const response = await axios.get(`${OMDB_CONFIG.BASE_URL}/?apikey=${OMDB_CONFIG.API_KEY}&s=${query}&type=movie`);
+        if (response.data.Response === "True") {
+            const movies = response.data.Search.map(movie => ({
+                id: movie.imdbID,
+                title: movie.Title,
+                poster: movie.Poster !== "N/A" ? movie.Poster : null,
+                year: movie.Year
+            }));
+            res.status(200).json({ results: movies });
+        } else {
+            res.status(200).json({ results: [] });
         }
-        res.status(200).json({ results: movies });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-
 exports.getMovieById = async (req, res) => {
     try {
         const movieId = req.params.id;
-        console.log("movieId", movieId);
-        const movie = await tmdbService.getMovieDetails(movieId);
-        if (!movie) {
-            return res.status(404).json({ message: 'Movie not found' });
+        const response = await axios.get(`${OMDB_CONFIG.BASE_URL}/?apikey=${OMDB_CONFIG.API_KEY}&i=${movieId}&plot=full`);
+        
+        if (response.data.Response === "True") {
+            const movieData = response.data;
+            const movie = {
+                id: movieData.imdbID,
+                title: movieData.Title,
+                description: movieData.Plot,
+                poster: movieData.Poster !== "N/A" ? movieData.Poster : null,
+                rating: movieData.imdbRating,
+                duration: movieData.Runtime,
+                releaseDate: movieData.Released,
+                language: movieData.Language,
+                category: movieData.Genre
+            };
+            res.status(200).json(movie);
+        } else {
+            res.status(404).json({ message: 'Movie not found' });
         }
-        res.status(200).json(movie);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.getRandomMovie = async (req, res) => {
+    try {
+        // List of some popular movie IMDb IDs
+        const popularMovieIds = [
+            'tt0111161', 'tt0068646', 'tt0071562', 'tt0468569', 
+            'tt0050083', 'tt0108052', 'tt0167260', 'tt0110912'
+        ];
+        const randomId = popularMovieIds[Math.floor(Math.random() * popularMovieIds.length)];
+        
+        const response = await axios.get(`${OMDB_CONFIG.BASE_URL}/?apikey=${OMDB_CONFIG.API_KEY}&i=${randomId}`);
+        
+        if (response.data.Response === "True") {
+            const movieData = response.data;
+            const movie = {
+                id: movieData.imdbID,
+                title: movieData.Title,
+                description: movieData.Plot,
+                poster: movieData.Poster !== "N/A" ? movieData.Poster : null,
+                rating: movieData.imdbRating,
+                duration: movieData.Runtime,
+                releaseDate: movieData.Released,
+                language: movieData.Language,
+                category: movieData.Genre
+            };
+            res.status(200).json(movie);
+        } else {
+            res.status(404).json({ message: 'Movie not found' });
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
 exports.createMovie = async (req, res) => {
-    if (!req.body) {
-        return res.status(400).json({ message: 'Please provide movie data' });
-    }
-    try {
-        const movie = new Movie(req.body);
-        await movie.save();
-        res.status(201).json({ message: 'Movie added successfully', movie });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
-
-exports.getRandomMovie = async (req, res) => {
-    try {
-        const movies = await tmdbService.getMovies();
-        const randomIndex = Math.floor(Math.random() * movies.length);
-        const randomMovie = movies[randomIndex];
-        const movieDetails = await tmdbService.getMovieDetails(randomMovie.id);
-        res.status(200).json(movieDetails);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+    res.status(501).json({ message: 'Create movie functionality not available with OMDB API' });
 };

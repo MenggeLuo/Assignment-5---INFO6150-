@@ -12,7 +12,7 @@ const BookingConfirmation = () => {
             <div>
                 <NavigationBar />
                 <div className="container mx-auto px-4 py-8">
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    <div className="alert alert-danger">
                         No booking details found. Please try booking again.
                     </div>
                 </div>
@@ -21,72 +21,232 @@ const BookingConfirmation = () => {
     }
 
     return (
-        <div>
+        <>
             <NavigationBar />
-            <div className="container mx-auto px-4 py-8">
-                <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
-                    {/* Success Message */}
-                    <div className="text-center mb-8">
-                        <div className="inline-block p-4 bg-green-100 rounded-full mb-4">
-                            <svg className="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+            <div className="confirmation-container">
+                <div className="confirmation-card">
+                    <div className="success-header">
+                        <div className="success-icon">
+                            <svg viewBox="0 0 24 24" className="checkmark">
+                                <path 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    strokeWidth="2" 
+                                    d="M3,12 l6,6 l12,-12"
+                                />
                             </svg>
                         </div>
-                        <h1 className="text-2xl font-bold text-gray-800 mb-2">Booking Confirmed!</h1>
-                        <p className="text-gray-600">Your tickets have been booked successfully</p>
+                        <h2>Booking Confirmed!</h2>
+                        <p>Your tickets have been booked successfully</p>
                     </div>
 
-                    {/* Booking Details */}
-                    <div className="border-t border-b border-gray-200 py-6 mb-6">
-                        <h2 className="text-xl font-semibold mb-4">Booking Details</h2>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <p className="text-gray-600">Theater</p>
-                                <p className="font-medium">{bookingDetails.theaterName}</p>
+                    <div className="booking-details">
+                        <div className="detail-group">
+                            <h3>Theater Information</h3>
+                            <div className="detail-item">
+                                <span className="label">Theater:</span>
+                                <span className="value">{bookingDetails.theaterName}</span>
                             </div>
-                            <div>
-                                <p className="text-gray-600">Location</p>
-                                <p className="font-medium">{bookingDetails.theaterLocation}</p>
+                            <div className="detail-item">
+                                <span className="label">Location:</span>
+                                <span className="value">{bookingDetails.theaterLocation}</span>
                             </div>
-                            <div>
-                                <p className="text-gray-600">Show Time</p>
-                                <p className="font-medium">
+                        </div>
+
+                        <div className="detail-group">
+                            <h3>Show Information</h3>
+                            <div className="detail-item">
+                                <span className="label">Date & Time:</span>
+                                <span className="value">
                                     {new Date(bookingDetails.showTime).toLocaleString()}
-                                </p>
+                                </span>
                             </div>
-                            <div>
-                                <p className="text-gray-600">Screen</p>
-                                <p className="font-medium">Screen {bookingDetails.screenNumber}</p>
+                            <div className="detail-item">
+                                <span className="label">Screen:</span>
+                                <span className="value">Screen {bookingDetails.screenNumber}</span>
                             </div>
-                            <div>
-                                <p className="text-gray-600">Seats</p>
-                                <p className="font-medium">{bookingDetails.seats}</p>
+                            <div className="detail-item">
+                                <span className="label">Seats:</span>
+                                <span className="value">{bookingDetails.seats}</span>
                             </div>
-                            <div>
-                                <p className="text-gray-600">Total Amount</p>
-                                <p className="font-medium">${bookingDetails.totalPrice}</p>
+                        </div>
+
+                        <div className="detail-group">
+                            <h3>Payment Information</h3>
+                            <div className="detail-item">
+                                <span className="label">Total Amount:</span>
+                                <span className="value price">${bookingDetails.totalPrice.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button
+                    <div className="action-buttons">
+                        <button 
+                            className="btn-primary"
                             onClick={() => navigate('/home')}
-                            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors"
                         >
                             Back to Home
                         </button>
-                        <button
+                        <button 
+                            className="btn-secondary"
                             onClick={() => window.print()}
-                            className="bg-gray-100 text-gray-700 px-6 py-2 rounded hover:bg-gray-200 transition-colors"
                         >
                             Print Ticket
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <style jsx="true">{`
+                .confirmation-container {
+                    min-height: calc(100vh - 56px);
+                    background-color: #f5f5f5;
+                    padding: 40px 20px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-start;
+                }
+
+                .confirmation-card {
+                    background: white;
+                    border-radius: 16px;
+                    padding: 30px;
+                    max-width: 600px;
+                    width: 100%;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }
+
+                .success-header {
+                    text-align: center;
+                    margin-bottom: 30px;
+                    padding-bottom: 30px;
+                    border-bottom: 1px solid #eee;
+                }
+
+                .success-icon {
+                    width: 80px;
+                    height: 80px;
+                    margin: 0 auto 20px;
+                    background: #4facfe;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .checkmark {
+                    width: 40px;
+                    height: 40px;
+                    color: white;
+                }
+
+                .success-header h2 {
+                    color: #2d3748;
+                    font-size: 24px;
+                    margin-bottom: 8px;
+                }
+
+                .success-header p {
+                    color: #718096;
+                    margin: 0;
+                }
+
+                .booking-details {
+                    margin-bottom: 30px;
+                }
+
+                .detail-group {
+                    margin-bottom: 25px;
+                }
+
+                .detail-group h3 {
+                    font-size: 18px;
+                    color: #2d3748;
+                    margin-bottom: 15px;
+                    padding-bottom: 8px;
+                    border-bottom: 2px solid #4facfe;
+                }
+
+                .detail-item {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 12px;
+                }
+
+                .label {
+                    color: #718096;
+                    font-weight: 500;
+                }
+
+                .value {
+                    color: #2d3748;
+                    font-weight: 600;
+                }
+
+                .price {
+                    color: #4facfe;
+                    font-size: 18px;
+                }
+
+                .action-buttons {
+                    display: flex;
+                    gap: 15px;
+                    justify-content: center;
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 1px solid #eee;
+                }
+
+                .btn-primary, .btn-secondary {
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                    border: none;
+                }
+
+                .btn-primary {
+                    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+                    color: white;
+                }
+
+                .btn-secondary {
+                    background: #f8f9fa;
+                    color: #4a5568;
+                    border: 1px solid #e2e8f0;
+                }
+
+                .btn-primary:hover, .btn-secondary:hover {
+                    transform: translateY(-2px);
+                }
+
+                @media (max-width: 640px) {
+                    .confirmation-container {
+                        padding: 20px 10px;
+                    }
+
+                    .confirmation-card {
+                        padding: 20px;
+                        border-radius: 12px;
+                    }
+
+                    .action-buttons {
+                        flex-direction: column;
+                    }
+
+                    .btn-primary, .btn-secondary {
+                        width: 100%;
+                    }
+                }
+
+                @media print {
+                    .action-buttons {
+                        display: none;
+                    }
+                }
+            `}</style>
+        </>
     );
 };
 

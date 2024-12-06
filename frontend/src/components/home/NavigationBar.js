@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const NavigationBar = () => {
     const navigate = useNavigate();
+    const [searchInput, setSearchInput] = useState('');
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -11,8 +12,10 @@ const NavigationBar = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        const searchQuery = e.target.search.value;
-        navigate(`/search?q=${searchQuery}`);
+        if (searchInput.trim()) {
+            navigate(`/search?q=${encodeURIComponent(searchInput.trim())}`);
+            setSearchInput(''); // Clear input after search
+        }
     };
 
     return (
@@ -35,13 +38,17 @@ const NavigationBar = () => {
                         <li className="nav-item">
                             <Link className="nav-link active" to="/home">Home</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/my-tickets">My Tickets</Link>
+                        </li>
                     </ul>
                     <form className="d-flex me-3" onSubmit={handleSearch}>
                         <input 
                             className="form-control me-2" 
                             type="search" 
                             placeholder="Search movies..." 
-                            name="search"
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
                         />
                         <button className="btn btn-outline-light" type="submit">
                             Search
@@ -55,6 +62,22 @@ const NavigationBar = () => {
                     </button>
                 </div>
             </div>
+
+            <style jsx="true">{`
+                .navbar {
+                    padding: 10px 0;
+                }
+
+                .form-control {
+                    min-width: 200px;
+                }
+
+                @media (max-width: 768px) {
+                    .form-control {
+                        min-width: auto;
+                    }
+                }
+            `}</style>
         </nav>
     );
 };
