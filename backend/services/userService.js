@@ -13,6 +13,7 @@ const registerUser = async (email, password, username) => {
     const user = new User({ 
         email, 
         password,
+        username,
         isAdmin: false  // 默认为 false
     });
     await user.save();
