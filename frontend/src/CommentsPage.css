@@ -184,6 +184,8 @@ textarea:focus {
     border: none;
     padding: 5px 10px;
     margin-top: 5px;
+    margin-bottom: 10px;
+
 }
 
 .error-message {

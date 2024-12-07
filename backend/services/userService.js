@@ -1,12 +1,13 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
-const registerUser = async (email, password) => {
+const registerUser = async (email, password, username) => {
     // Check whether a user with the same mailbox already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         throw new Error("This email is already registered. Please use another email.");
     }
+
 
     // Create a new user with isAdmin field
     const user = new User({ 
@@ -16,6 +17,13 @@ const registerUser = async (email, password) => {
     });
     await user.save();
     return user;
+};
+
+
+
+const isUsernameUnique = async (username) => {
+    const user = await User.findOne({ username });
+    return !user;
 };
 
 const loginUser = async (email, password) => {
@@ -57,4 +65,4 @@ const updatePassword = async (email, newPassword) => {
     return updatedUser;
 };
 
-module.exports = { registerUser, loginUser, checkEmailExists, updatePassword };
+module.exports = { registerUser, isUsernameUnique, loginUser, checkEmailExists, updatePassword };

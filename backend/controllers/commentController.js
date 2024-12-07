@@ -226,13 +226,179 @@ const testFindNestedComment = async () => {
 
 testFindNestedComment();
 
+const likeComment = async (req, res) => {
+    try {
+        const commentId = req.params.commentId;
+        const userId = req.user.id;
+
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({ error: "Comment not found" });
+        }
+
+        const userIdStr = userId.toString();
+        const hasLiked = comment.likes.some(id => id && id.toString() === userIdStr);
+        const hasDisliked = comment.dislikes.some(id => id && id.toString() === userIdStr);
+
+        if (hasLiked) {
+            // Remove like
+            comment.likes = comment.likes.filter(id => id && id.toString() !== userIdStr);
+        } else {
+            // Add like
+            comment.likes.push(userId);
+            if (hasDisliked) {
+                // Remove dislike if user has disliked before
+                comment.dislikes = comment.dislikes.filter(id => id && id.toString() !== userIdStr);
+            }
+        }
+
+        await comment.save();
+
+        res.json({
+            success: true,
+            comment: comment,
+        });
+    } catch (error) {
+        console.error("Like processing error:", error);
+        res.status(500).json({ error: "Error processing like" });
+    }
+};
+const dislikeComment = async (req, res) => {
+    try {
+        const commentId = req.params.commentId;
+        const userId = req.user.id;
+
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({ error: "Comment not found" });
+        }
+
+        const userIdStr = userId.toString();
+        const hasLiked = comment.likes.some(id => id && id.toString() === userIdStr);
+        const hasDisliked = comment.dislikes.some(id => id && id.toString() === userIdStr);
+
+        if (hasDisliked) {
+            // Remove dislike
+            comment.dislikes = comment.dislikes.filter(id => id && id.toString() !== userIdStr);
+        } else {
+            // Add dislike
+            comment.dislikes.push(userId);
+            if (hasLiked) {
+                // Remove like if user has liked before
+                comment.likes = comment.likes.filter(id => id && id.toString() !== userIdStr);
+            }
+        }
+
+        await comment.save();
+
+        res.json({
+            success: true,
+            comment: {
+                comment: comment,
+            },
+        });
+    } catch (error) {
+        console.error("Like processing error:", error);
+        res.status(500).json({ error: "Error processing dislike" });
+    }
+};
 
 
 
 
 
+const findAndUpdateReply = (replies, replyId, userId, action) => {
+    for (let reply of replies) {
+        if (reply._id.toString() === replyId) {
+            const userIdStr = userId.toString();
+
+            if (action === 'like') {
+                const hasLiked = reply.likes.some(id => id && id.toString() === userIdStr);
+                const hasDisliked = reply.dislikes.some(id => id && id.toString() === userIdStr);
+
+                if (hasLiked) {
+                    reply.likes = reply.likes.filter(id => id && id.toString() !== userIdStr);
+                } else {
+                    reply.likes.push(userId);
+                    if (hasDisliked) {
+                        reply.dislikes = reply.dislikes.filter(id => id && id.toString() !== userIdStr);
+                    }
+                }
+            } else if (action === 'dislike') {
+                const hasLiked = reply.likes.some(id => id && id.toString() === userIdStr);
+                const hasDisliked = reply.dislikes.some(id => id && id.toString() === userIdStr);
+
+                if (hasDisliked) {
+                    reply.dislikes = reply.dislikes.filter(id => id && id.toString() !== userIdStr);
+                } else {
+                    reply.dislikes.push(userId);
+                    if (hasLiked) {
+                        reply.likes = reply.likes.filter(id => id && id.toString() !== userIdStr);
+                    }
+                }
+            }
+            return true;
+        }
+        if (reply.replies && reply.replies.length > 0) {
+            const found = findAndUpdateReply(reply.replies, replyId, userId, action);
+            if (found) return true;
+        }
+    }
+    return false;
+};
+
+const likeReply = async (req, res) => {
+    try {
+        const replyId = req.params.replyId;
+        const userId = req.user.id;
+
+        const comment = await Comment.findOne({ 
+            $or: [
+                { "replies._id": replyId },
+                { "replies.replies._id": replyId }
+            ]
+        });
+
+        if (!comment) {
+            return res.status(404).json({ error: "Reply not found" });
+        }
+
+        findAndUpdateReply(comment.replies, replyId, userId, 'like');
+        await comment.save();
+        res.json({ success: true, comment });
+    } catch (error) {
+        console.error("Error processing like for reply:", error);
+        res.status(500).json({ error: "Error processing like for reply" });
+    }
+};
+
+const dislikeReply =  async (req, res) => {
+    try {
+        const replyId = req.params.replyId;
+        const userId = req.user.id;
+
+        const comment = await Comment.findOne({ 
+            $or: [
+                { "replies._id": replyId },
+                { "replies.replies._id": replyId }
+            ]
+        });
+
+        if (!comment) {
+            return res.status(404).json({ error: "Reply not found" });
+        }
+
+        findAndUpdateReply(comment.replies, replyId, userId, 'dislike');
+        await comment.save();
+        res.json({ success: true, comment });
+    } catch (error) {
+        console.error("Error processing dislike for reply:", error);
+        res.status(500).json({ error: "Error processing dislike for reply" });
+    }
+};
 
 
 
 
-module.exports = { getComments, addComment, deleteComment, addReply, addNestedReply, deleteReply };
+
+module.exports = { getComments, addComment, deleteComment, addReply, deleteReply, likeComment, dislikeComment, likeReply, dislikeReply };
