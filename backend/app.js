@@ -20,10 +20,11 @@ app.use(
 
 app.use(bodyParser.json());
 //app.use("/api/users", userRoutes);
-app.use("/api", allRoutes);
+
 
 app.use("/api/users", userRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api", allRoutes);
 
 const PORT = process.env.PORT || 5002; // Use the port configuration in.env
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
