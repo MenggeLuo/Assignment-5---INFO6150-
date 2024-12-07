@@ -11,6 +11,7 @@ import BookingPage from "./components/booking/BookingPage";
 import BookingConfirmation from "./components/booking/BookingConfirmation";
 import MyTickets from './components/MyTickets';
 import Comments from "./components/CommentsPage";
+import Admin from "./components/Admin";
 import "./App.css";
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/signup/step1" element={<SignUpStep1 />} />
           <Route path="/signup/step2" element={<SignUpStep2 />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/home" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/movie/:id" element={<MovieDetail />} />

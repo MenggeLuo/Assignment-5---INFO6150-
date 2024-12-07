@@ -8,19 +8,26 @@ const registerUser = async (email, password) => {
         throw new Error("This email is already registered. Please use another email.");
     }
 
-    // Create a new user
-    const user = new User({ email, password });
+    // Create a new user with isAdmin field
+    const user = new User({ 
+        email, 
+        password,
+        isAdmin: false  // 默认为 false
+    });
     await user.save();
     return user;
 };
 
 const loginUser = async (email, password) => {
-    const user = await User.findOne({ email });
+    
+    const user = await User.findOne({ email }).select('+isAdmin');
     if (!user) throw new Error("Invalid email or password");
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error("Invalid email or password");
 
+    console.log('User in loginUser:', user);
+    
     return user;
 };
 

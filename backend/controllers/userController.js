@@ -1,6 +1,7 @@
 const userService = require("../services/userService");
 const jwt = require("jsonwebtoken");
 const { sendEmail } = require("../services/emailService");
+const User = require("../models/user");
 
 const tempStorage = {};
 
@@ -11,15 +12,17 @@ const login = async (req, res) => {
         if (!email || !password) {
             return res.status(400).json({ error: "Email and password are required." });
         }
+
         const user = await userService.loginUser(email, password);
 
         const token = jwt.sign(
-            { id: user._id, email: user.email }, 
-            process.env.JWT_SECRET, // secret key
-            { expiresIn: "1h" } // expiration time
+            { id: user._id, email: user.email, isAdmin: user.isAdmin },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" } 
         );
 
-        res.status(200).json({ message: "Login successful", token });
+        
+        res.status(200).json({ message: "Login successful", token, isAdmin: user.isAdmin });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -174,5 +177,18 @@ const deleteUserByEmail = async (req, res) => {
     }
 };
 
-module.exports = { saveEmailAndSendCode, verifyCode, register, login, checkEmail, resetPassword, requestPasswordReset, deleteUserByEmail };
+const getAllUsers = async (req, res) => {
+    try {
+        console.log("Attempting to fetch all users...");
+        const users = await User.find({}).select("email -_id");
+        console.log("Fetched users:", users);
+
+        res.status(200).json({ users });
+    } catch (error) {
+        console.error("Error occurred in getAllUsers:", error.message, error.stack);
+        res.status(500).json({ error: "Error fetching users" });
+    }
+};
+
+module.exports = { saveEmailAndSendCode, verifyCode, register, login, checkEmail, resetPassword, requestPasswordReset, deleteUserByEmail, getAllUsers };
 
