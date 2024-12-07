@@ -12,6 +12,7 @@ import BookingConfirmation from "./components/booking/BookingConfirmation";
 import MyTickets from './components/MyTickets';
 import Comments from "./components/CommentsPage";
 import Admin from "./components/Admin";
+import PaymentPage from './components/PaymentPage';
 import "./App.css";
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/booking/:id" element={<BookingPage />} />
           <Route path="/booking/confirmation" element={<BookingConfirmation />} />
           <Route path="/my-tickets" element={<MyTickets />} />
+          <Route path="/payment" element={<PaymentPage />} />
           <Route path="*" element={<Login />} />
         </Routes>
       </Router>

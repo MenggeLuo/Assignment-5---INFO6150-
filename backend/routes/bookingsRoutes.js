@@ -15,4 +15,6 @@ router.get('/:bookingId', authMiddleware, bookingController.getBookingDetails);
 // Get user's bookings
 router.get('/user/history', authMiddleware, bookingController.getUserBookings);
 
+router.post('/payment/confirm', authMiddleware, bookingController.confirmPayment);
+
 module.exports = router;
