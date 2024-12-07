@@ -87,16 +87,15 @@ const BookingPage = () => {
 
             const selectedTheaterData = theaters.find(t => t._id === selectedTheater);
 
-            // Mock successful booking response
-            const mockBookingResponse = {
-                ...bookingData,
-                theaterName: selectedTheaterData?.name,
-                theaterLocation: selectedTheaterData?.location,
-                screenNumber: 1
-            };
-
-            navigate('/booking/confirmation', { 
-                state: { bookingDetails: mockBookingResponse }
+            navigate('/payment', { 
+                state: { 
+                    bookingDetails: {
+                        ...bookingData,
+                        theaterName: selectedTheaterData?.name,
+                        theaterLocation: selectedTheaterData?.location,
+                        screenNumber: 1
+                    } 
+                }
             });
         } catch (err) {
             setError(err.response?.data?.message || 'Booking failed');

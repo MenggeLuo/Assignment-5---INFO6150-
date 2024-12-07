@@ -77,7 +77,8 @@ exports.createBooking = async (req, res) => {
             screenNumber: screen.number,
             showTime,
             seats,
-            totalPrice: seats * showtime.price
+            totalPrice: seats * showtime.price,
+            paymentStatus: 'pending'
         });
 
         // Update available seats
@@ -124,6 +125,44 @@ exports.getUserBookings = async (req, res) => {
             .sort({ showTime: -1 });
 
         res.json(bookings);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.confirmPayment = async (req, res) => {
+    try {
+        const { bookingId, paymentId } = req.body;
+        
+        const booking = await Booking.findByIdAndUpdate(
+            bookingId,
+            {
+                paymentStatus: 'completed',
+                paymentId: paymentId,
+                paymentDate: new Date()
+            },
+            { new: true }
+        );
+
+        if (!booking) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+
+      
+        const theater = await Theater.findById(booking.theaterId);
+        const screen = theater.screens.find(s => s.number === booking.screenNumber);
+        const showtime = screen.showTimes.find(show => 
+            show.movieId.toString() === booking.movieId.toString() && 
+            new Date(show.time).toISOString() === new Date(booking.showTime).toISOString()
+        );
+
+        showtime.availableSeats -= booking.seats;
+        await theater.save();
+
+        res.status(200).json({ 
+            success: true, 
+            booking 
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

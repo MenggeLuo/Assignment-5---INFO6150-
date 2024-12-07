@@ -5,6 +5,13 @@ const bookingSchema = new mongoose.Schema({
     seats: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
     bookingDate: { type: Date, default: Date.now },
+    paymentStatus: {
+        type: String,
+        enum: ['pending', 'completed', 'failed'],
+        default: 'pending'
+    },
+    paymentId: String,
+    paymentDate: Date
 });
 
 module.exports = mongoose.model('Booking', bookingSchema);
