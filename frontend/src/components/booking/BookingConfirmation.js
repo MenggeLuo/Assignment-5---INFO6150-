@@ -2,17 +2,41 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NavigationBar from '../home/NavigationBar';
 import axios from 'axios';
+import { useState } from 'react';
 import { create } from '@mui/material/styles/createTransitions';
 
 const BookingConfirmation = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { bookingDetails } = location.state || {};
+    const [isBooked, setIsBooked] = useState(false);
     // console.log("Booking Details: ", bookingDetails);
 
-    useEffect(() => {
-        console.log("USE EFFECT");
+    // useEffect(() => {
+    //     console.log("USE EFFECT");
         
+    //     const createBookingServerside = async () => {
+    //         try {
+    //             const bookingDetailsWithToken = {...bookingDetails, token: localStorage.getItem('token')};
+    //             const token = localStorage.getItem('token');
+    //             const response = await axios.post('http://localhost:5002/api/bookings', bookingDetailsWithToken, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             });
+                
+    //             console.log("Booking created successfully: ", response.data);
+                
+    //         } catch (error) {
+    //             console.error("Error creating booking: ", error);
+    //         }
+    //     };
+    //     createBookingServerside();
+    // }, []);
+
+    useEffect(() => {
+        if (isBooked) return;  // 如果已经创建过订单，就不再创建
+    
         const createBookingServerside = async () => {
             try {
                 const bookingDetailsWithToken = {...bookingDetails, token: localStorage.getItem('token')};
@@ -22,15 +46,16 @@ const BookingConfirmation = () => {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                
+
                 console.log("Booking created successfully: ", response.data);
+                setIsBooked(true);  // 标记订单已创建
                 
             } catch (error) {
                 console.error("Error creating booking: ", error);
             }
         };
         createBookingServerside();
-    }, []);
+    }, [bookingDetails, isBooked]);
     
     if (!bookingDetails) {
         return (
