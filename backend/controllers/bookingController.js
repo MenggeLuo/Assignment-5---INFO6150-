@@ -1,6 +1,7 @@
 const Booking = require('../models/Booking');
 const Theater = require('../models/Theater');
 const Movie = require('../models/Movie');
+const jwt = require('jsonwebtoken');
 
 exports.getShowtimes = async (req, res) => {
     try {
@@ -38,60 +39,58 @@ exports.getShowtimes = async (req, res) => {
 
 exports.createBooking = async (req, res) => {
     try {
-        const { movieId, theaterId, showTime, seats } = req.body;
-        const userId = req.user.id;
-
+        const { movieId, theaterId, showTime, seats, token } = req.body;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
+        
+        //*BUG: There are no theaters in the database
         // Find the theater and showtime
-        const theater = await Theater.findById(theaterId);
-        if (!theater) {
-            return res.status(404).json({ error: 'Theater not found' });
-        }
+        // const theater = await Theater.findById(theaterId);
+        // if (!theater) {
+        //     return res.status(404).json({ error: 'Theater not found' });
+        // }
 
+
+        //*BUG: Also no screens in thbe database. Need to seed data
         // Find the specific showtime
-        const screen = theater.screens.find(screen => 
-            screen.showTimes.some(show => 
-                show.movieId.toString() === movieId && 
-                new Date(show.time).toISOString() === new Date(showTime).toISOString()
-            )
-        );
+        // const screen = theater.screens.find(screen => 
+        //     screen.showTimes.some(show => 
+        //         show.movieId.toString() === movieId && 
+        //         new Date(show.time).toISOString() === new Date(showTime).toISOString()
+        //     )
+        // );
 
-        if (!screen) {
-            return res.status(404).json({ error: 'Showtime not found' });
-        }
+        // if (!screen) {
+        //     return res.status(404).json({ error: 'Showtime not found' });
+        // }
 
-        const showtime = screen.showTimes.find(show => 
-            show.movieId.toString() === movieId && 
-            new Date(show.time).toISOString() === new Date(showTime).toISOString()
-        );
+        // const showtime = screen.showTimes.find(show => 
+        //     show.movieId.toString() === movieId && 
+        //     new Date(show.time).toISOString() === new Date(showTime).toISOString()
+        // );
 
         // Check seat availability
-        if (showtime.availableSeats < seats) {
-            return res.status(400).json({ error: 'Not enough seats available' });
-        }
+        // if (showtime.availableSeats < seats) {
+        //     return res.status(400).json({ error: 'Not enough seats available' });
+        // }
 
         // Create booking
         const booking = new Booking({
-            userId,
-            movieId,
-            theaterId,
-            screenNumber: screen.number,
-            showTime,
-            seats,
-            totalPrice: seats * showtime.price,
-            paymentStatus: 'pending'
+            userId, 
+            ...req.body
         });
 
         // Update available seats
-        showtime.availableSeats -= seats;
-        await theater.save();
+        // showtime.availableSeats -= seats;
+        // await theater.save();
         await booking.save();
 
         res.status(201).json({
             message: 'Booking successful',
             booking: {
                 ...booking.toObject(),
-                theaterName: theater.name,
-                theaterLocation: theater.location
+                // theaterName: theater.name,
+                // theaterLocation: theater.location
             }
         });
     } catch (error) {
@@ -117,14 +116,19 @@ exports.getBookingDetails = async (req, res) => {
 };
 
 exports.getUserBookings = async (req, res) => {
+    
     try {
-        const userId = req.user.id;
+        console.log("HEADER", req.headers.authorization.split(' ')[1]);
+        
+        const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.JWT_SECRET);
+        const userId = decoded.id;
+        // const userId = req.user.id;
         const bookings = await Booking.find({ userId })
-            .populate('movieId', 'title posterPath')
-            .populate('theaterId', 'name location')
-            .sort({ showTime: -1 });
+        console.log("BOOKINGS", bookings);
+    
+            
 
-        res.json(bookings);
+        res.status(200).json({message: "Get all bookings success", bookings});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

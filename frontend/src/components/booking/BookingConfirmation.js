@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NavigationBar from '../home/NavigationBar';
+import axios from 'axios';
+import { create } from '@mui/material/styles/createTransitions';
 
 const BookingConfirmation = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { bookingDetails } = location.state || {};
+    // console.log("Booking Details: ", bookingDetails);
 
+    useEffect(() => {
+        console.log("USE EFFECT");
+        
+        const createBookingServerside = async () => {
+            try {
+                const bookingDetailsWithToken = {...bookingDetails, token: localStorage.getItem('token')};
+                const token = localStorage.getItem('token');
+                const response = await axios.post('http://localhost:5002/api/bookings', bookingDetailsWithToken, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                
+                console.log("Booking created successfully: ", response.data);
+                
+            } catch (error) {
+                console.error("Error creating booking: ", error);
+            }
+        };
+        createBookingServerside();
+    }, []);
+    
     if (!bookingDetails) {
         return (
             <div>

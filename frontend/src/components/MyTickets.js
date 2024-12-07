@@ -6,9 +6,10 @@ import NavigationBar from './home/NavigationBar';
 const MyTickets = () => {
     const navigate = useNavigate();
     const [tickets, setTickets] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [cancellingId, setCancellingId] = useState(null);
+console.log('Tickets:', tickets);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -17,43 +18,31 @@ const MyTickets = () => {
                 return;
             }
 
-        fetchTickets();
+            const fetchTickets = async () => {
+                try {
+                    const response = await axios.get('http://localhost:5002/api/bookings/user/history', {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                    
+                    const bookings = response.data.bookings;
+                   
+                    
+                    setTickets(bookings);
+                } catch (error) {
+                    setError('Failed to fetch tickets. Please try again later.');
+                    console.error('Error fetching tickets:', error);
+                    
+                }
+            }
+
+            // setLoading(false);
+
+            fetchTickets();
     }, []);
 
-    const fetchTickets = async () => {
-        try {
-            setLoading(true);
-            // Mock data - replace with actual API call
-            const mockTickets = [
-                {
-                    id: '1',
-                    movieTitle: 'The Dark Knight',
-                    theater: 'AMC Theater',
-                    location: 'Downtown Boston',
-                    showTime: new Date('2024-12-10T19:00:00').toISOString(),
-                    seats: 2,
-                    totalPrice: 24.00,
-                    status: 'active'
-                },
-                {
-                    id: '2',
-                    movieTitle: 'Inception',
-                    theater: 'Regal Cinemas',
-                    location: 'Cambridge',
-                    showTime: new Date('2024-12-15T20:30:00').toISOString(),
-                    seats: 3,
-                    totalPrice: 36.00,
-                    status: 'active'
-                }
-            ];
-            setTickets(mockTickets);
-        } catch (err) {
-            setError('Failed to fetch tickets. Please try again later.');
-            console.error('Error fetching tickets:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // 
 
     const handleCancelTicket = async (ticketId) => {
         try {
@@ -109,22 +98,23 @@ const MyTickets = () => {
                     ) : tickets.length > 0 ? (
                         <div className="tickets-list">
                             {tickets.map((ticket) => (
-                                <div key={ticket.id} className={`ticket-card ${ticket.status === 'cancelled' ? 'cancelled' : ''}`}>
+                                
+                                <div key={ticket.id} className={`ticket-card ${ticket.paymentStatus === 'cancelled' ? 'cancelled' : ''}`}>
                                     <div className="ticket-header">
-                                        <h2>{ticket.movieTitle}</h2>
-                                        <span className={`status-badge ${ticket.status}`}>
-                                            {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
+                                        <h2>Movie ID: {ticket.movieId}</h2>
+                                        <span className={`status-badge ${ticket.paymentStatus}`}>
+                                            {ticket.paymentStatus.charAt(0).toUpperCase() + ticket.paymentStatus.slice(1)}
                                         </span>
                                     </div>
                                     
                                     <div className="ticket-details">
                                         <div className="detail-group">
                                             <span className="label">Theater:</span>
-                                            <span className="value">{ticket.theater}</span>
+                                            <span className="value">{ticket.theaterName}</span>
                                         </div>
                                         <div className="detail-group">
                                             <span className="label">Location:</span>
-                                            <span className="value">{ticket.location}</span>
+                                            <span className="value">{ticket.theaterLocation}</span>
                                         </div>
                                         <div className="detail-group">
                                             <span className="label">Show Time:</span>

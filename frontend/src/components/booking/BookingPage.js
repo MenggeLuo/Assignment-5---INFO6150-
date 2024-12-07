@@ -87,6 +87,9 @@ const BookingPage = () => {
 
             const selectedTheaterData = theaters.find(t => t._id === selectedTheater);
 
+            //save booking data to the server
+            // await axios.post('http://localhost:5002/api/bookings', bookingData);
+
             navigate('/payment', { 
                 state: { 
                     bookingDetails: {
