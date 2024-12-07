@@ -115,7 +115,9 @@ const MovieDetail = () => {
                                         <div className="comment-header">
                                             <span className="username">{comment.username}</span>
                                             <span className="date">
-                                                {new Date(comment.date).toLocaleDateString()}
+
+                                                {new Date(comment.createdAt).toLocaleString()}
+
                                             </span>
                                         </div>
                                         <p className="comment-content">{comment.content}</p>
