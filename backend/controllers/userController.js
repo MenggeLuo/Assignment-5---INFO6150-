@@ -104,14 +104,15 @@ const register = async (req, res) => {
             isUnique = await userService.isUsernameUnique(username);
         }
         
-        // user register
-        const user = await userService.registerUser(email, password);
+        // User registration
+        const user = await userService.registerUser(email, password, username);
         res.status(201).json({ message: "User registered successfully", user });
     } catch (error) {
         console.error("Error in register:", error);
         res.status(500).json({ error: "Error registering user. Please try again later." });
     }
 };
+
 
 const resetPassword = async (req, res) => {
     try {

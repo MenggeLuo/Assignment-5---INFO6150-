@@ -14,6 +14,7 @@ const registerUser = async (email, password, username) => {
     return user;
 };
 
+
 const isUsernameUnique = async (username) => {
     const user = await User.findOne({ username });
     return !user;
