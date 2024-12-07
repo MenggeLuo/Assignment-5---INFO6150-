@@ -4,9 +4,6 @@ const { sendEmail } = require("../services/emailService");
 
 const tempStorage = {};
 
-const User = require('../models/user');
-
-
 
 const login = async (req, res) => {
     try {
@@ -16,9 +13,8 @@ const login = async (req, res) => {
         }
         const user = await userService.loginUser(email, password);
 
-        // Generate tokens using JWT signatures
         const token = jwt.sign(
-            { id: user._id, email: user.email, username: user.username }, // payload
+            { id: user._id, email: user.email }, 
             process.env.JWT_SECRET, // secret key
             { expiresIn: "1h" } // expiration time
         );
@@ -99,7 +95,6 @@ const register = async (req, res) => {
         const decoded = jwt.verify(tempToken, process.env.JWT_SECRET);
         const email = decoded.email;
 
-        // Generate a default username from the email
         let username = email.split("@")[0];
 
         // Ensure username is unique
@@ -108,9 +103,9 @@ const register = async (req, res) => {
             username = `${username}${Math.floor(1000 + Math.random() * 9000)}`;
             isUnique = await userService.isUsernameUnique(username);
         }
-
-        // Register the user with the generated username
-        const user = await userService.registerUser(email, password, username);
+        
+        // user register
+        const user = await userService.registerUser(email, password);
         res.status(201).json({ message: "User registered successfully", user });
     } catch (error) {
         console.error("Error in register:", error);
@@ -118,9 +113,50 @@ const register = async (req, res) => {
     }
 };
 
+const resetPassword = async (req, res) => {
+    try {
+        const { tempToken, newPassword } = req.body;
+        const decoded = jwt.verify(tempToken, process.env.JWT_SECRET);
+        const email = decoded.email;
+
+        await userService.updatePassword(email, newPassword);
+
+        res.status(200).json({ message: "Password reset successful." });
+    } catch (error) {
+        console.error("Error in resetPassword:", error);
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({ error: "Token expired. Please request a new password reset." });
+        } else if (error.name === "JsonWebTokenError") {
+            return res.status(400).json({ error: "Invalid token. Please request a new password reset." });
+        }
+        res.status(500).json({ error: "Error resetting password. Please try again later." });
+    }
+};
+
+const requestPasswordReset = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const userExists = await userService.checkEmailExists(email);
+        if (!userExists) {
+            return res.status(404).json({ error: "Email not registered." });
+        }
+
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        tempStorage[email] = { code, timestamp: Date.now() };
+        await sendEmail(email, code);
+
+        res.status(200).json({ message: "Password reset code sent to email." });
+    } catch (error) {
+        console.error("Error in requestPasswordReset:", error);
+        res.status(500).json({ error: "Error sending password reset email. Please try again later." });
+    }
+};
+
+
 const deleteUserByEmail = async (req, res) => {
     try {
-        const { email } = req.body; // 从请求体中获取邮箱
+        const { email } = req.body; 
 
         if (!email) {
             return res.status(400).json({ error: "Email is required." });
@@ -138,8 +174,5 @@ const deleteUserByEmail = async (req, res) => {
     }
 };
 
-
-
-
-module.exports = { saveEmailAndSendCode, verifyCode, register, login, checkEmail, deleteUserByEmail };
+module.exports = { saveEmailAndSendCode, verifyCode, register, login, checkEmail, resetPassword, requestPasswordReset, deleteUserByEmail };
 
